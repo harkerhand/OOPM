@@ -1,0 +1,92 @@
+#include "CreateClassDialog.h"
+#include "CreateMemberDialog.h"
+#include "QMessageBox"
+#include "MemberDetailsDialog.h"
+
+CreateClassDialog::CreateClassDialog(QWidget *parent) : QDialog(parent) {
+    QFormLayout *formLayout = new QFormLayout(this);
+
+    _idEdit = new QLineEdit(this);
+    _nameEdit = new QLineEdit(this);
+    _baseClassNameEdit = new QLineEdit(this);
+    _functionEdit = new QTextEdit(this);
+    _creationDateEdit = new QDateTimeEdit(QDateTime::currentDateTime(), this);
+    _authorEdit = new QLineEdit(this);
+    _membersListWidget = new QListWidget(this);
+
+    // 设置表单字段
+    formLayout->addRow("ID:", _idEdit);
+    formLayout->addRow("Class Name:", _nameEdit);
+    formLayout->addRow("Base Class Name:", _baseClassNameEdit);
+    formLayout->addRow("Function:", _functionEdit);
+    formLayout->addRow("Creation Date:", _creationDateEdit);
+    formLayout->addRow("Author:", _authorEdit);
+    formLayout->addRow("Members:", _membersListWidget);
+
+    // 添加成员按钮
+    QPushButton *addMemberButton = new QPushButton("Add Member", this);
+    formLayout->addRow(addMemberButton);
+    connect(addMemberButton, &QPushButton::clicked, this, &CreateClassDialog::onAddMemberClicked);
+
+
+    QPushButton *createButton = new QPushButton("Create", this);
+    QPushButton *cancelButton = new QPushButton("Cancel", this);
+    formLayout->addRow(createButton, cancelButton);
+
+    // 将按钮的信号连接到对话框的槽函数
+    connect(createButton, &QPushButton::clicked, this, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
+    connect(_membersListWidget, &QListWidget::itemClicked, this, &CreateClassDialog::onMemberClicked);
+
+    // 创建主布局
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addLayout(formLayout);  // 添加表单布局
+
+    setLayout(mainLayout);
+
+    setWindowTitle("Create New Class");
+}
+
+
+ClassInfo CreateClassDialog::getClassInfo() const {
+    int id = _idEdit->text().toInt();
+    QString name = _nameEdit->text();
+    QString baseClassName = _baseClassNameEdit->text();
+    QString function = _functionEdit->toPlainText();
+    QDateTime creationDate = _creationDateEdit->dateTime();
+    QString author = _authorEdit->text();
+
+    return ClassInfo(id, name, baseClassName, function, creationDate, author, _members);
+}
+
+void CreateClassDialog::onAddMemberClicked() {
+
+    CreateMemberDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        ClassMember newMember = dialog.getClassMember();
+        _members.append(newMember);
+        QMessageBox::information(this, "Member Created", QString("Member %1 created successfully!").arg(newMember.memberName()));
+        _membersListWidget->addItem(newMember.memberName());
+    }
+
+}
+
+
+void CreateClassDialog::onMemberClicked(QListWidgetItem *item) {
+    // 找到被点击的成员在列表中的索引
+    int row = _membersListWidget->row(item);
+    if (row >= 0 && row < _members.size()) {
+        ClassMember member = _members.at(row);
+
+        MemberDetailsDialog detailsDialog(member, this);
+        connect(&detailsDialog, &MemberDetailsDialog::memberDeleted, [this, row]() {
+            // 删除成员
+            _members.removeAt(row);
+            delete _membersListWidget->takeItem(row);  // 移除列表项
+        });
+
+        if (detailsDialog.exec() == QDialog::Accepted) {
+            QMessageBox::information(this, "Member Deleted", QString("Member deleted successfully!"));
+        }
+    }
+}
