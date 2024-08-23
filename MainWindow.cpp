@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "ClassModel.h"
+#include "SimpleTextDialog.h"
 #include <QTableView>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -8,38 +9,39 @@
 #include <QStandardItemModel>
 #include <QDataStream>
 #include <QFile>
+#include <QAction>
+#include <QToolBar>
 #include "CreateClassDialog.h"
+#include "MemberModel.h"
+#include "MembersDetailDialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _classes() {
     // 界面设置
+    QToolBar *toolbar = addToolBar("File");
+    QAction *loadAction = new QAction("Load Data", this);
+    loadAction->setShortcut(QKeySequence::Open);
+    connect(loadAction, &QAction::triggered, this, &MainWindow::onLoadData);
+    toolbar->addAction(loadAction);
+    QAction *saveAction = new QAction("Save Data", this);
+    saveAction->setShortcut(QKeySequence::Save);
+    connect(saveAction, &QAction::triggered, this, &MainWindow::onSaveData);
+    toolbar->addAction(saveAction);
+    QAction *addAction = new QAction("Add Class", this);
+    addAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
+    connect(addAction, &QAction::triggered, this, &MainWindow::onAddClass);
+    toolbar->addAction(addAction);
+
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
 
     _tableView = new QTableView(this);
     layout->addWidget(_tableView);
 
-    QPushButton *addClassButton = new QPushButton("Add Class", this);
-    layout->addWidget(addClassButton);
-
-    QPushButton *deleteClassButton = new QPushButton("Delete Class", this);
-    layout->addWidget(deleteClassButton);
-
-    QPushButton *saveDataButton = new QPushButton("Save Data", this);
-    layout->addWidget(saveDataButton);
-
-    QPushButton *loadDataButton = new QPushButton("Load Data", this);
-    layout->addWidget(loadDataButton);
-
     setCentralWidget(centralWidget);
-    resize(1280, 720);
+    resize(960, 600);
     displayClasses();
 
-    // 信号与槽连接
-    connect(addClassButton, &QPushButton::clicked, this, &MainWindow::onAddClass);
-    connect(deleteClassButton, &QPushButton::clicked, this, &MainWindow::onDeleteClass);
-    connect(saveDataButton, &QPushButton::clicked, this, &MainWindow::onSaveData);
-    connect(loadDataButton, &QPushButton::clicked, this, &MainWindow::onLoadData);
     connect(_tableView, &QTableView::clicked, this, &MainWindow::onCellClicked);
 
 }
@@ -55,13 +57,7 @@ void MainWindow::onAddClass() {
     displayClasses();
 }
 
-void MainWindow::onDeleteClass() {
-    // 示例：删除最后一个类
-    if (!_classes.isEmpty()) {
-        _classes.removeLast();
-    }
-    displayClasses();
-}
+
 
 void MainWindow::onSaveData() {
     QString fileName = QFileDialog::getSaveFileName(this, "Save Data", "", "Data Files (*.dat)");
@@ -116,15 +112,12 @@ void MainWindow::onLoadData() {
 void MainWindow::displayClasses() {
     // 示例：显示所有类的信息
     // 可以使用 QStandardItemModel 或其他方式展示
+    _tableView->clearSpans();
     ClassModel *model = new ClassModel(_classes, this);
     _tableView->setModel(model);
 
 }
 
-void MainWindow::displayMembers(const ClassInfo& classInfo) {
-    // 示例：显示特定类的成员信息
-    // 可以使用 QStandardItemModel 或其他方式展示
-}
 
 
 
@@ -132,12 +125,41 @@ void MainWindow::onCellClicked(const QModelIndex &index) {
     if (!index.isValid())
         return;
 
-    // Get the data from the clicked cell
-    QVariant data = _tableView->model()->data(index);
-    QString cellText = data.toString();
+    int column = index.column();
+    int row = index.row();
+    if(column == 0){
+        QMessageBox msgBox;
+        msgBox.setText("你想要进行什么操作？");
+        QAbstractButton* modifyButton = msgBox.addButton("修改", QMessageBox::YesRole);
+        QAbstractButton* deleteButton = msgBox.addButton("删除", QMessageBox::NoRole);
+        msgBox.addButton("取消", QMessageBox::RejectRole);
+        msgBox.exec();
 
-    // Show the data in a message box
-    QMessageBox::information(this, "Cell Clicked", QString("Clicked cell data: %1").arg(cellText));
+        if(msgBox.clickedButton() == deleteButton) {
+            _classes.removeAt(row);
+            displayClasses();
+        } else if(msgBox.clickedButton() == modifyButton) {
+            CreateClassDialog dialog(this, _classes.at(row));
+            if (dialog.exec() == QDialog::Accepted) {
+                ClassInfo newClass = dialog.getClassInfo();
+                _classes[row] = newClass;
+                QMessageBox::information(this, "Class Created", QString("Class %1 modified successfully!").arg(newClass.name()));
+                displayClasses();
+            }
+        }
+    } else if(column == 6) {
+        QList<ClassMember> tempMembers = _classes.at(row).members();
+        MembersDetailDialog detailsDialog(tempMembers, this);
+        detailsDialog.exec();
+        _classes[row].setMembers(detailsDialog.getMembers());
+        displayClasses();
+    } else {
+        QVariant data = _tableView->model()->data(index);
+        QString cellText = data.toString();
+
+        // Show the data in a message box
+        SimpleTextDialog(cellText).exec();
+    }
 }
 
 

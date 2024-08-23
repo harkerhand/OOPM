@@ -19,7 +19,7 @@ class CreateClassDialog : public QDialog {
     Q_OBJECT
 
 public:
-    CreateClassDialog(QWidget *parent = nullptr);
+    CreateClassDialog(QWidget *parent = nullptr, const ClassInfo& classInfo = ClassInfo());
 
     ClassInfo getClassInfo() const;
 

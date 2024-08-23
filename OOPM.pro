@@ -18,6 +18,7 @@ SOURCES += \
     CreateClassDialog.cpp \
     CreateMemberDialog.cpp \
     MemberDetailsDialog.cpp \
+    MembersDetailDialog.cpp \
     Utils.cpp \
     main.cpp \
     MainWindow.cpp
@@ -31,6 +32,9 @@ HEADERS += \
     Enums.h \
     MainWindow.h \
     MemberDetailsDialog.h \
+    MemberModel.h \
+    MembersDetailDialog.h \
+    SimpleTextDialog.h \
     Utils.h
 
 TRANSLATIONS += \

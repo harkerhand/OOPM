@@ -3,7 +3,7 @@
 #include "QMessageBox"
 #include "MemberDetailsDialog.h"
 
-CreateClassDialog::CreateClassDialog(QWidget *parent) : QDialog(parent) {
+CreateClassDialog::CreateClassDialog(QWidget *parent, const ClassInfo& classInfo) : QDialog(parent) {
     QFormLayout *formLayout = new QFormLayout(this);
 
     _idEdit = new QLineEdit(this);
@@ -13,7 +13,9 @@ CreateClassDialog::CreateClassDialog(QWidget *parent) : QDialog(parent) {
     _creationDateEdit = new QDateTimeEdit(QDateTime::currentDateTime(), this);
     _authorEdit = new QLineEdit(this);
     _membersListWidget = new QListWidget(this);
-
+    QFont font = _membersListWidget->font();
+    font.setPointSize(18);
+    _membersListWidget->setFont(font);
     // 设置表单字段
     formLayout->addRow("ID:", _idEdit);
     formLayout->addRow("Class Name:", _nameEdit);
@@ -23,13 +25,27 @@ CreateClassDialog::CreateClassDialog(QWidget *parent) : QDialog(parent) {
     formLayout->addRow("Author:", _authorEdit);
     formLayout->addRow("Members:", _membersListWidget);
 
+    if(classInfo.id() != -1) {
+        _idEdit->setText(QString::number(classInfo.id()));
+        _nameEdit->setText(classInfo.name());
+        _baseClassNameEdit->setText(classInfo.baseClassName());
+        _functionEdit->setPlainText(classInfo.function());
+        _creationDateEdit->setDateTime(classInfo.creationDate());
+        _authorEdit->setText(classInfo.author());
+        _membersListWidget->clear();  // 清除现有内容
+        for (const ClassMember &member : classInfo.members()) {
+            _membersListWidget->addItem(member.memberName());
+            _members.append(member);
+        }
+    }
+
     // 添加成员按钮
     QPushButton *addMemberButton = new QPushButton("Add Member", this);
     formLayout->addRow(addMemberButton);
     connect(addMemberButton, &QPushButton::clicked, this, &CreateClassDialog::onAddMemberClicked);
 
 
-    QPushButton *createButton = new QPushButton("Create", this);
+    QPushButton *createButton = new QPushButton(classInfo.id() == -1 ? "Create" : "Modify", this);
     QPushButton *cancelButton = new QPushButton("Cancel", this);
     formLayout->addRow(createButton, cancelButton);
 
@@ -44,7 +60,7 @@ CreateClassDialog::CreateClassDialog(QWidget *parent) : QDialog(parent) {
 
     setLayout(mainLayout);
 
-    setWindowTitle("Create New Class");
+    setWindowTitle((classInfo.id() == -1 ? "Create New" : "Modify") + QString(" Class"));
 }
 
 

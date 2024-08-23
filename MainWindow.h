@@ -17,7 +17,6 @@ public:
 
 private slots:
     void onAddClass();
-    void onDeleteClass();
     void onSaveData();
     void onLoadData();
     void onCellClicked(const QModelIndex &index);

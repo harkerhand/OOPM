@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QInputDialog>
+#include <string>
 
 CreateMemberDialog::CreateMemberDialog(QWidget *parent)
     : QDialog(parent) {
@@ -57,8 +58,8 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent)
     setLayout(mainLayout);
     setWindowTitle("Create New Class Member");
 
-    onMemberTypeChanged(_memberTypeComboBox->currentIndex());
-    onDataTypeChanged(_dataTypeComboBox->currentIndex());
+    onMemberTypeChanged();
+    onDataTypeChanged();
 }
 
 ClassMember CreateMemberDialog::getClassMember() const {
@@ -72,7 +73,7 @@ ClassMember CreateMemberDialog::getClassMember() const {
 }
 
 
-void CreateMemberDialog::onMemberTypeChanged(int index) {
+void CreateMemberDialog::onMemberTypeChanged() {
     MemberType memberType = _memberTypeComboBox->currentData().value<MemberType>();
     if (memberType == MemberType::Function) {
         _memorySizeSpinBox->setValue(0);
@@ -85,15 +86,22 @@ void CreateMemberDialog::onMemberTypeChanged(int index) {
     }
 }
 
-void CreateMemberDialog::onDataTypeChanged(int index) {
+void CreateMemberDialog::onDataTypeChanged() {
     if (_memberTypeComboBox->currentData().value<MemberType>() == MemberType::Data) {
         DataType dataType = _dataTypeComboBox->currentData().value<DataType>();
-        if (dataType == DataType::String || dataType == DataType::Custom) {
+        if (dataType == DataType::Custom) {
             bool ok;
             int size = QInputDialog::getInt(this, "Input Size",
                                             "Enter size for selected data type:", 0, 0, 10000, 1, &ok);
             if (ok) {
                 _memorySizeSpinBox->setValue(size);
+            }
+        } else if (dataType == DataType::String) {
+            bool ok;
+            std::string str = QInputDialog::getText(this, "Input String",
+                                            "Enter string for selected data type:", QLineEdit::Normal, "", &ok).toStdString();
+            if (ok) {
+                _memorySizeSpinBox->setValue(sizeof(str));
             }
         } else {
             int size = getDataTypeSize(dataType);

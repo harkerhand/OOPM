@@ -17,8 +17,8 @@ public:
     ClassMember getClassMember() const;
 
 private slots:
-    void onMemberTypeChanged(int index);
-    void onDataTypeChanged(int index);
+    void onMemberTypeChanged();
+    void onDataTypeChanged();
 private:
     QLineEdit *_idEdit;
     QLineEdit *_nameEdit;

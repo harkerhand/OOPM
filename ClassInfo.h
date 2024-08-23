@@ -37,6 +37,14 @@ public:
     QDateTime creationDate() const { return _creationDate; }
     QString author() const { return _author; }
     QList<ClassMember> members() const { return _members; }
+    // Setter
+    void setId(int id) { _id = id; }
+    void setName(const QString &name) { _name = name; }
+    void setBaseClassName(const QString &baseClassName) { _baseClassName = baseClassName; }
+    void setFunction(const QString &function) { _function = function; }
+    void setCreationDate(const QDateTime &creationDate) { _creationDate = creationDate; }
+    void setAuthor(const QString &author) { _author = author; }
+    void setMembers(const QList<ClassMember> &members) { _members = members; }
 };
 
 

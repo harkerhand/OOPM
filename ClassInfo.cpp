@@ -1,7 +1,7 @@
 #include "ClassInfo.h"
 
 ClassInfo::ClassInfo()
-    : _id(0), _name(""), _baseClassName(""), _function(""),
+    : _id(-1), _name(""), _baseClassName(""), _function(""),
       _creationDate(QDateTime()), _author("") {}
 
 ClassInfo::ClassInfo(int id, const QString& name, const QString& baseClassName, const QString& function,
