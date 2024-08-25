@@ -11,6 +11,10 @@ class SimpleTextDialog : public QDialog {
 public:
     SimpleTextDialog(const QString &text, QWidget *parent = nullptr)
         : QDialog(parent) {
+
+        // 移除问号
+        setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
         QVBoxLayout *layout = new QVBoxLayout(this);
         QLabel *label = new QLabel(text, this);
         label->setWordWrap(true);  // 自动换行
@@ -21,6 +25,8 @@ public:
         // 调整对话框大小以适应其内容
         label->adjustSize();
         adjustSize();
+        setMinimumWidth(300);
+
         setWindowTitle("Detail");
     }
 };

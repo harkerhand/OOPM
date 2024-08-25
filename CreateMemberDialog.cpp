@@ -7,8 +7,12 @@
 #include <QInputDialog>
 #include <string>
 
-CreateMemberDialog::CreateMemberDialog(QWidget *parent)
-    : QDialog(parent) {
+CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember> &members, const ClassMember &member, bool isModifyMode)
+    : QDialog(parent), _members(members), _isModifyMode(isModifyMode) {
+
+    // 移除问号
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     QFormLayout *formLayout = new QFormLayout(this);
 
     _idEdit = new QLineEdit(this);
@@ -17,6 +21,10 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent)
     _memorySizeSpinBox = new QSpinBox(this);
     _dataTypeComboBox = new QComboBox(this);
     _accessibilityComboBox = new QComboBox(this);
+
+    _idWarningLabel = new QLabel(this);
+    _idWarningLabel->setStyleSheet("color: red;");
+    _idWarningLabel->setVisible(false); // 初始时隐藏
 
     // 成员类型选择框
     _memberTypeComboBox->addItem("Data", QVariant::fromValue(MemberType::Data));
@@ -36,27 +44,40 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent)
 
     // 设置表单字段
     formLayout->addRow("Member ID:", _idEdit);
+    formLayout->addRow("", _idWarningLabel);
     formLayout->addRow("Member Name:", _nameEdit);
     formLayout->addRow("Member Type:", _memberTypeComboBox);
     formLayout->addRow("Memory Bytes:", _memorySizeSpinBox);
     formLayout->addRow("Data Type:", _dataTypeComboBox);
     formLayout->addRow("Accessibility:", _accessibilityComboBox);
 
+    if(isModifyMode == true) {
+        _idEdit->setText(QString::number(member.memberId()));
+        _nameEdit->setText(member.memberName());
+        _memberTypeComboBox->setCurrentIndex(_memberTypeComboBox->findData(QVariant::fromValue(member.memberType())));
+        _memorySizeSpinBox->setValue(member.memorySize());
+        _dataTypeComboBox->setCurrentIndex(_dataTypeComboBox->findData(QVariant::fromValue(member.dataType())));
+        _accessibilityComboBox->setCurrentIndex(_accessibilityComboBox->findData(QVariant::fromValue(member.accessibility())));
+        _idEdit->setReadOnly(true);
+    }
+
+
     // 创建和取消按钮
-    QPushButton *createButton = new QPushButton("Create", this);
+    _createButton = new QPushButton(isModifyMode ? "Modify" : "Create", this);
     QPushButton *cancelButton = new QPushButton("Cancel", this);
-    formLayout->addRow(createButton, cancelButton);
+    formLayout->addRow( cancelButton, _createButton);
 
     connect(_memberTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CreateMemberDialog::onMemberTypeChanged);
     connect(_dataTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CreateMemberDialog::onDataTypeChanged);
-    connect(createButton, &QPushButton::clicked, this, &QDialog::accept);
+    connect(_createButton, &QPushButton::clicked, this, &QDialog::accept);
     connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
+    connect(_idEdit, &QLineEdit::textChanged, this, &CreateMemberDialog::onIdChanged);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(formLayout);
 
     setLayout(mainLayout);
-    setWindowTitle("Create New Class Member");
+    setWindowTitle(isModifyMode ? "Modify" : "Create New" +  QString(" Class Member"));
 
     onMemberTypeChanged();
     onDataTypeChanged();
@@ -110,3 +131,26 @@ void CreateMemberDialog::onDataTypeChanged() {
     }
 }
 
+void CreateMemberDialog::onIdChanged(const QString &text) {
+    if (_isModifyMode) {
+        return;  // 修改模式不进行检查
+    }
+
+    bool idExists = false;
+    int id = text.toInt();
+    for (const ClassMember &existingMember : _members) {
+        if (existingMember.memberId() == id) {
+            idExists = true;
+            break;
+        }
+    }
+
+    if (idExists) {
+        _idWarningLabel->setText("ID already exists!");
+        _idWarningLabel->setVisible(true);
+        _createButton->setEnabled(false);
+    } else {
+        _idWarningLabel->setVisible(false);
+        _createButton->setEnabled(true);
+    }
+}

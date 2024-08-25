@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QAction>
 #include <QToolBar>
+#include <QHeaderView>
 #include "CreateClassDialog.h"
 #include "MemberModel.h"
 #include "MembersDetailDialog.h"
@@ -36,10 +37,15 @@ MainWindow::MainWindow(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
 
     _tableView = new QTableView(this);
+
+    //自动调整
+    _tableView->horizontalHeader()->setStretchLastSection(true);
+    _tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
     layout->addWidget(_tableView);
 
     setCentralWidget(centralWidget);
-    resize(960, 600);
+    resize(1080, 720);
     displayClasses();
 
     connect(_tableView, &QTableView::clicked, this, &MainWindow::onCellClicked);
@@ -48,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::onAddClass() {
     // 示例：添加一个类
-    CreateClassDialog dialog(this);
+    CreateClassDialog dialog(this, _classes);
     if (dialog.exec() == QDialog::Accepted) {
         ClassInfo newClass = dialog.getClassInfo();
         _classes.append(newClass);
@@ -139,7 +145,7 @@ void MainWindow::onCellClicked(const QModelIndex &index) {
             _classes.removeAt(row);
             displayClasses();
         } else if(msgBox.clickedButton() == modifyButton) {
-            CreateClassDialog dialog(this, _classes.at(row));
+            CreateClassDialog dialog(this, _classes, _classes.at(row), true);
             if (dialog.exec() == QDialog::Accepted) {
                 ClassInfo newClass = dialog.getClassInfo();
                 _classes[row] = newClass;
@@ -153,6 +159,9 @@ void MainWindow::onCellClicked(const QModelIndex &index) {
         detailsDialog.exec();
         _classes[row].setMembers(detailsDialog.getMembers());
         displayClasses();
+    } else if(column == 4) {
+        QString dateTime = _classes.at(row).creationDate().toString("yyyy-MM-dd HH:mm ddd");
+        SimpleTextDialog(dateTime).exec();
     } else {
         QVariant data = _tableView->model()->data(index);
         QString cellText = data.toString();

@@ -26,14 +26,14 @@ public:
 
         const ClassInfo &classInfo = _classes.at(index.row());
         switch (index.column()) {
-            case 0: return classInfo.id();
-            case 1: return classInfo.name();
-            case 2: return classInfo.baseClassName();
-            case 3: return classInfo.function();
-            case 4: return classInfo.creationDate().toString("yyyy-MM-dd");
-            case 5: return classInfo.author();
-            case 6: return classInfo.members().size() ;  // Join member list into a single string
-            default: return QVariant();
+        case 0: return classInfo.id();
+        case 1: return classInfo.name();
+        case 2: return classInfo.baseClassName();
+        case 3: return classInfo.function();
+        case 4: return classInfo.creationDate().toString("yyyy-MM-dd");
+        case 5: return classInfo.author();
+        case 6: return QString::number(classInfo.members().size()) + "个";
+        default: return QVariant();
         }
     }
 

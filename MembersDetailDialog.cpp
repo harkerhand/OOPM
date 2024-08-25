@@ -2,10 +2,14 @@
 #include "CreateMemberDialog.h"
 #include <QHeaderView>
 #include <QToolBar>
+#include <QHeaderView>
 #include <QMessageBox>
 
 MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *parent)
     : QDialog(parent), _members(members) {
+
+    // 移除问号
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QToolBar *toolBar = new QToolBar("new");
     QAction *addAction = new QAction("Add Member", this);
@@ -14,6 +18,8 @@ MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *p
     toolBar->addAction(addAction);
 
     _tableView = new QTableView(this);
+    _tableView->horizontalHeader()->setStretchLastSection(true);
+    _tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     showMembers();
 
@@ -23,7 +29,7 @@ MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *p
 
     setLayout(layout);
     setWindowTitle("Members Details");
-    resize(800, 600);
+    resize(900, 600);
 }
 
 void MembersDetailDialog::onAddMember() {
