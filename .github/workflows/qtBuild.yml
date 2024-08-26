@@ -38,14 +38,14 @@ jobs:
         run: |
           mkdir -p ${{ env.BUILD_DIR }}
           cd ${{ env.BUILD_DIR }}
-          qmake ../../path/to/your_project.pro
+          qmake ../../path/to/OOPM.pro
           make
 
       - name: Move executable to timestamped directory
         run: |
           # 假设可执行文件名为 'your_executable'
           # 根据实际情况修改路径和文件名
-          mv ${{ env.BUILD_DIR }}/your_executable ${{ env.BUILD_DIR }}/
+          mv ${{ env.BUILD_DIR }}/OOPM ${{ env.BUILD_DIR }}/
       
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
