@@ -23,6 +23,9 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
     _idWarningLabel->setStyleSheet("color: red;");
     _idWarningLabel->setVisible(false); // 初始时隐藏
 
+    // 设置id框只能输入整数
+    QIntValidator *idValidator = new QIntValidator(0, 99999, this);
+    _idEdit->setValidator(idValidator);
 
     QFont font = _membersListWidget->font();
     font.setPointSize(14); // 18 太大了
@@ -59,15 +62,13 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
 
 
     _createButton = new QPushButton(isModifyMode ? "Modify" : "Create" , this);
-    QPushButton *cancelButton = new QPushButton("Cancel", this);
-    formLayout->addRow(cancelButton, _createButton);
+    formLayout->addRow(_createButton);
 
     // 将按钮的信号连接到对话框的槽函数
     connect(_createButton, &QPushButton::clicked, this, &QDialog::accept);
-    connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
     connect(_membersListWidget, &QListWidget::itemClicked, this, &CreateClassDialog::onMemberClicked);
     connect(_idEdit, &QLineEdit::textChanged, this, &CreateClassDialog::onIdChanged);
-
+    if(!isModifyMode) onIdChanged("0");
 
     // 创建主布局
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -139,6 +140,10 @@ void CreateClassDialog::onIdChanged(const QString &text) {
 
     if (idExists) {
         _idWarningLabel->setText("ID already exists!");
+        _idWarningLabel->setVisible(true);
+        _createButton->setEnabled(false);
+    } else if (id == 0) {
+        _idWarningLabel->setText("ID can not be empty!");
         _idWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
     } else {

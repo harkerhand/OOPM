@@ -42,6 +42,10 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
     _accessibilityComboBox->addItem("Protected", QVariant::fromValue(Accessibility::Protected));
 
 
+    // 设置id框只能输入整数
+    QIntValidator *idValidator = new QIntValidator(0, 99999, this);
+    _idEdit->setValidator(idValidator);
+
     // 设置表单字段
     formLayout->addRow("Member ID:", _idEdit);
     formLayout->addRow("", _idWarningLabel);
@@ -64,14 +68,13 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
 
     // 创建和取消按钮
     _createButton = new QPushButton(isModifyMode ? "Modify" : "Create", this);
-    QPushButton *cancelButton = new QPushButton("Cancel", this);
-    formLayout->addRow( cancelButton, _createButton);
+    formLayout->addRow(_createButton);
 
     connect(_memberTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CreateMemberDialog::onMemberTypeChanged);
     connect(_dataTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CreateMemberDialog::onDataTypeChanged);
     connect(_createButton, &QPushButton::clicked, this, &QDialog::accept);
-    connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
     connect(_idEdit, &QLineEdit::textChanged, this, &CreateMemberDialog::onIdChanged);
+    if(!isModifyMode) onIdChanged("0");
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(formLayout);
@@ -147,6 +150,10 @@ void CreateMemberDialog::onIdChanged(const QString &text) {
 
     if (idExists) {
         _idWarningLabel->setText("ID already exists!");
+        _idWarningLabel->setVisible(true);
+        _createButton->setEnabled(false);
+    } else if (id == 0) {
+        _idWarningLabel->setText("ID can not be empty!");
         _idWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
     } else {

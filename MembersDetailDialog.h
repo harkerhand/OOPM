@@ -22,6 +22,7 @@ public:
 
 private slots:
     void onAddMember();
+    void onCellClicked(const QModelIndex &index);
 
 private:
     QList<ClassMember> _members;

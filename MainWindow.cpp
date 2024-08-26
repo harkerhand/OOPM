@@ -20,18 +20,23 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _classes() {
     // 界面设置
     QToolBar *toolbar = addToolBar("File");
+
     QAction *loadAction = new QAction("Load Data", this);
-    loadAction->setShortcut(QKeySequence::Open);
-    connect(loadAction, &QAction::triggered, this, &MainWindow::onLoadData);
-    toolbar->addAction(loadAction);
     QAction *saveAction = new QAction("Save Data", this);
-    saveAction->setShortcut(QKeySequence::Save);
-    connect(saveAction, &QAction::triggered, this, &MainWindow::onSaveData);
-    toolbar->addAction(saveAction);
     QAction *addAction = new QAction("Add Class", this);
+
+    loadAction->setShortcut(QKeySequence::Open);
+    saveAction->setShortcut(QKeySequence::Save);
     addAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
-    connect(addAction, &QAction::triggered, this, &MainWindow::onAddClass);
+    toolbar->addAction(loadAction);
+    toolbar->addAction(saveAction);
     toolbar->addAction(addAction);
+
+    connect(loadAction, &QAction::triggered, this, &MainWindow::onLoadData);
+    connect(saveAction, &QAction::triggered, this, &MainWindow::onSaveData);
+    connect(addAction, &QAction::triggered, this, &MainWindow::onAddClass);
+
+
 
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
