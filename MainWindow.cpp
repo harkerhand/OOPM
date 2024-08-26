@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _classes() {
     // 界面设置
     QToolBar *toolbar = addToolBar("File");
-
+    toolbar->setFixedHeight(50);
     QAction *loadAction = new QAction("Load Data", this);
     QAction *saveAction = new QAction("Save Data", this);
     QAction *addAction = new QAction("Add Class", this);
@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(_tableView);
 
     setCentralWidget(centralWidget);
-    resize(1080, 720);
+    setMinimumSize(1080, 720);
     displayClasses();
 
     connect(_tableView, &QTableView::clicked, this, &MainWindow::onCellClicked);
