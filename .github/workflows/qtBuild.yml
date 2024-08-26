@@ -29,6 +29,9 @@ jobs:
           modules: qtbase
           cached: true
 
+      - name: Add Qt to PATH
+        run: echo "/opt/Qt/${{ env.QT_VERSION }}/gcc_64/bin" >> $GITHUB_PATH
+
       - name: Install build dependencies
         run: |
           sudo apt-get update
