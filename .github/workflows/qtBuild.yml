@@ -21,9 +21,9 @@ jobs:
 
       - name: Download and extract Qt
         run: |
-          curl -L -o qt.7z https://download.qt.io/official_releases/qt/5.15/5.15.2/qt-opensource-windows-x86-5.15.2.7z
-          7z x qt.7z -oC:\Qt\5.15.2
-          echo "C:\Qt\5.15.2\msvc2019_64\bin" >> $Env:GITHUB_PATH
+          curl -L -o qt.zip https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip
+          Expand-Archive -Path qt.zip -DestinationPath C:\Qt\5.15.2
+          echo "C:\Qt\5.15.2\bin" >> $Env:GITHUB_PATH
 
       - name: Install build dependencies
         run: |
