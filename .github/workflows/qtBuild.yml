@@ -13,7 +13,6 @@ jobs:
     runs-on: windows-latest
     
     env:
-      QT_VERSION: '5.12.10'
       BUILD_DIR: 'build/${{ github.run_id }}'
 
     steps:
@@ -22,15 +21,12 @@ jobs:
 
       - name: Set up Qt
         run: |
-          # 下载并安装 Qt
-          choco install qt5 --version=${{ env.QT_VERSION }} --limit-output
-          # 确保 qmake 可用
-          echo "C:\Qt\${{ env.QT_VERSION }}\msvc2017_64\bin" >> $Env:GITHUB_PATH
+          choco install qt5 --limit-output
+          echo "C:\Qt\5.15.2\msvc2019_64\bin" >> $Env:GITHUB_PATH
 
       - name: Install build dependencies
         run: |
-          # 安装 MSVC 生成工具
-          choco install visualstudio2017buildtools --limit-output
+          choco install visualstudio2019buildtools --limit-output
 
       - name: Build project
         run: |
@@ -41,7 +37,6 @@ jobs:
 
       - name: Move executable to build directory
         run: |
-          # 假设可执行文件名为 'OOPM'
           Move-Item -Path .\OOPM.exe -Destination $env:BUILD_DIR\OOPM.exe
 
       - name: Upload build artifacts
