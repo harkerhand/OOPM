@@ -21,6 +21,7 @@ private slots:
     void onMemberTypeChanged();
     void onDataTypeChanged();
     void onIdChanged(const QString &text);
+    void onNameChanged(const QString &text);
 private:
     QLineEdit *_idEdit;
     QLineEdit *_nameEdit;
@@ -32,6 +33,7 @@ private:
     bool _isModifyMode;
     QPushButton *_createButton;
     QLabel *_idWarningLabel;
+    QLabel *_nameWarningLabel;
 };
 
 #endif // CREATEMEMBERDIALOG_H

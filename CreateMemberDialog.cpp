@@ -25,6 +25,9 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
     _idWarningLabel = new QLabel(this);
     _idWarningLabel->setStyleSheet("color: red;");
     _idWarningLabel->setVisible(false); // 初始时隐藏
+    _nameWarningLabel = new QLabel(this);
+    _nameWarningLabel->setStyleSheet("color: red;");
+    _nameWarningLabel->setVisible(false); // 初始时隐藏
 
     // 成员类型选择框
     _memberTypeComboBox->addItem("Data", QVariant::fromValue(MemberType::Data));
@@ -50,6 +53,7 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
     formLayout->addRow("Member ID:", _idEdit);
     formLayout->addRow("", _idWarningLabel);
     formLayout->addRow("Member Name:", _nameEdit);
+    formLayout->addRow("", _nameWarningLabel); // 在ID字段下面添加警告标签
     formLayout->addRow("Member Type:", _memberTypeComboBox);
     formLayout->addRow("Memory Bytes:", _memorySizeSpinBox);
     formLayout->addRow("Data Type:", _dataTypeComboBox);
@@ -74,7 +78,9 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
     connect(_dataTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CreateMemberDialog::onDataTypeChanged);
     connect(_createButton, &QPushButton::clicked, this, &QDialog::accept);
     connect(_idEdit, &QLineEdit::textChanged, this, &CreateMemberDialog::onIdChanged);
-    if(!isModifyMode) onIdChanged("0");
+    connect(_nameEdit, &QLineEdit::textChanged, this, &CreateMemberDialog::onNameChanged);
+    if(!isModifyMode) onIdChanged("");
+    onNameChanged(_nameEdit->text());
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(formLayout);
@@ -158,6 +164,17 @@ void CreateMemberDialog::onIdChanged(const QString &text) {
         _createButton->setEnabled(false);
     } else {
         _idWarningLabel->setVisible(false);
+        _createButton->setEnabled(true);
+    }
+}
+
+void CreateMemberDialog::onNameChanged(const QString &text) {
+    if (text == "") {
+        _nameWarningLabel->setText("Name can not be empty!");
+        _nameWarningLabel->setVisible(true);
+        _createButton->setEnabled(false);
+    } else {
+        _nameWarningLabel->setVisible(false);
         _createButton->setEnabled(true);
     }
 }

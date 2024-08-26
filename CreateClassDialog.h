@@ -28,7 +28,7 @@ private slots:
     void onAddMemberClicked();
     void onMemberClicked(QListWidgetItem *item);
     void onIdChanged(const QString &text);
-
+    void onNameChanged(const QString &text);
 private:
     QLineEdit *_idEdit;
     QLineEdit *_nameEdit;
@@ -38,6 +38,7 @@ private:
     QLineEdit *_authorEdit;
     QListWidget *_membersListWidget;
     QLabel *_idWarningLabel;
+    QLabel *_nameWarningLabel;
     QList<ClassMember> _members;
     QPushButton *_createButton;
     bool _isModifyMode;

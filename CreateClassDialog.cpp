@@ -22,6 +22,9 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
     _idWarningLabel = new QLabel(this);
     _idWarningLabel->setStyleSheet("color: red;");
     _idWarningLabel->setVisible(false); // 初始时隐藏
+    _nameWarningLabel = new QLabel(this);
+    _nameWarningLabel->setStyleSheet("color: red;");
+    _nameWarningLabel->setVisible(false); // 初始时隐藏
 
     // 设置id框只能输入整数
     QIntValidator *idValidator = new QIntValidator(0, 99999, this);
@@ -34,6 +37,7 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
     formLayout->addRow("ID:", _idEdit);
     formLayout->addRow("", _idWarningLabel); // 在ID字段下面添加警告标签
     formLayout->addRow("Class Name:", _nameEdit);
+    formLayout->addRow("", _nameWarningLabel); // 在name字段下面添加警告标签
     formLayout->addRow("Base Class Name:", _baseClassNameEdit);
     formLayout->addRow("Function:", _functionEdit);
     formLayout->addRow("Creation Date:", _creationDateEdit);
@@ -68,7 +72,9 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
     connect(_createButton, &QPushButton::clicked, this, &QDialog::accept);
     connect(_membersListWidget, &QListWidget::itemClicked, this, &CreateClassDialog::onMemberClicked);
     connect(_idEdit, &QLineEdit::textChanged, this, &CreateClassDialog::onIdChanged);
-    if(!isModifyMode) onIdChanged("0");
+    connect(_nameEdit, &QLineEdit::textChanged, this, &CreateClassDialog::onNameChanged);
+    if(!isModifyMode) onIdChanged("");
+    onNameChanged(_nameEdit->text());
 
     // 创建主布局
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -148,6 +154,17 @@ void CreateClassDialog::onIdChanged(const QString &text) {
         _createButton->setEnabled(false);
     } else {
         _idWarningLabel->setVisible(false);
+        _createButton->setEnabled(true);
+    }
+}
+
+void CreateClassDialog::onNameChanged(const QString &text) {
+    if (text == "") {
+        _nameWarningLabel->setText("Name can not be empty!");
+        _nameWarningLabel->setVisible(true);
+        _createButton->setEnabled(false);
+    } else {
+        _nameWarningLabel->setVisible(false);
         _createButton->setEnabled(true);
     }
 }

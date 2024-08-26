@@ -34,7 +34,7 @@ MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *p
 }
 
 void MembersDetailDialog::onAddMember() {
-    CreateMemberDialog dialog(this);
+    CreateMemberDialog dialog(this, _members);
     if (dialog.exec() == QDialog::Accepted) {
         ClassMember newMember = dialog.getClassMember();
         _members.append(newMember);

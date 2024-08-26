@@ -21,6 +21,12 @@ public:
     int memorySize() const { return _memorySize; }
     DataType dataType() const { return _dataType; }
     Accessibility accessibility() const { return _accessibility; }
+    void setMemberId(int id) { _memberId = id; }
+    void setMemberName(const QString &name) { _memberName = name; }
+    void setMemberType(const MemberType &memberType) { _memberType = memberType; }
+    void setMemorySize(const int &size) { _memorySize = size; }
+    void setDataType(const DataType &dataType) { _dataType = dataType; }
+    void setAccessibility(const Accessibility &access) {_accessibility = access; }
 
 private:
     int _memberId; // 成员编号
