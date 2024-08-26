@@ -41,12 +41,11 @@ jobs:
           qmake ../../path/to/OOPM.pro
           make
 
-      - name: Move executable to timestamped directory
+      - name: Move executable to build directory
         run: |
-          # 假设可执行文件名为 'your_executable'
-          # 根据实际情况修改路径和文件名
-          mv ${{ env.BUILD_DIR }}/OOPM ${{ env.BUILD_DIR }}/
-      
+          # 假设可执行文件名为 'OOPM'
+          mv OOPM ${{ env.BUILD_DIR }}/OOPM
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -57,8 +56,8 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add ${{ env.BUILD_DIR }}
+          git add ${{ env.BUILD_DIR }}/*
           git commit -m "Add build artifacts from run ${{ github.run_id }}"
-          git push origin main
+          git push origin master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
