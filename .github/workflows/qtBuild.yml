@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
     env:
       QT_VERSION: '5.12.10'
@@ -21,33 +21,28 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          version: ${{ env.QT_VERSION }}
-          host: ubuntu
-          arch: desktop
-          modules: qtbase
-          cached: true
-
-      - name: Add Qt to PATH
-        run: echo "/opt/Qt/${{ env.QT_VERSION }}/gcc_64/bin" >> $GITHUB_PATH
+        run: |
+          # 下载并安装 Qt
+          choco install qt5 --version=${{ env.QT_VERSION }} --limit-output
+          # 确保 qmake 可用
+          echo "C:\Qt\${{ env.QT_VERSION }}\msvc2017_64\bin" >> $Env:GITHUB_PATH
 
       - name: Install build dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential
+          # 安装 MSVC 生成工具
+          choco install visualstudio2017buildtools --limit-output
 
       - name: Build project
         run: |
-          mkdir -p ${{ env.BUILD_DIR }}
-          cd ${{ env.BUILD_DIR }}
-          qmake ../../path/to/OOPM.pro
-          make
+          mkdir $env:BUILD_DIR
+          cd $env:BUILD_DIR
+          qmake ..\..\path\to\OOPM.pro
+          nmake
 
       - name: Move executable to build directory
         run: |
           # 假设可执行文件名为 'OOPM'
-          mv OOPM ${{ env.BUILD_DIR }}/OOPM
+          Move-Item -Path .\OOPM.exe -Destination $env:BUILD_DIR\OOPM.exe
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -59,7 +54,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add ${{ env.BUILD_DIR }}/*
+          git add $env:BUILD_DIR\*
           git commit -m "Add build artifacts from run ${{ github.run_id }}"
           git push origin master
         env:
