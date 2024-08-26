@@ -1,0 +1,64 @@
+name: Build Qt Project
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    env:
+      QT_VERSION: '5.12.10'
+      BUILD_DIR: 'build/${{ github.run_id }}'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: ubuntu
+          arch: desktop
+          modules: qtbase
+          cached: true
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Build project
+        run: |
+          mkdir -p ${{ env.BUILD_DIR }}
+          cd ${{ env.BUILD_DIR }}
+          qmake ../../path/to/your_project.pro
+          make
+
+      - name: Move executable to timestamped directory
+        run: |
+          # 假设可执行文件名为 'your_executable'
+          # 根据实际情况修改路径和文件名
+          mv ${{ env.BUILD_DIR }}/your_executable ${{ env.BUILD_DIR }}/
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: qt-build-${{ github.run_id }}
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Commit and push build artifacts
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add ${{ env.BUILD_DIR }}
+          git commit -m "Add build artifacts from run ${{ github.run_id }}"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
