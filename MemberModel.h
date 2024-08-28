@@ -43,12 +43,12 @@ public:
 
         if (orientation == Qt::Horizontal) {
             switch (section) {
-                case 0: return "ID";
-                case 1: return "Member Name";
-                case 2: return "Member Type";
-                case 3: return "Memory Size";
-                case 4: return "Data Type";
-                case 5: return "Accessibility";
+                case 0: return tr("ID");
+                case 1: return tr("Member Name");
+                case 2: return tr("Member Type");
+                case 3: return tr("Memory Size");
+                case 4: return tr("Data Type");
+                case 5: return tr("Accessibility");
                 default: return QVariant();
             }
         }

@@ -27,7 +27,7 @@ public:
         adjustSize();
         setMinimumWidth(300);
 
-        setWindowTitle("Detail");
+        setWindowTitle(tr("Detail"));
     }
 };
 

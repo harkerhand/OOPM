@@ -10,7 +10,7 @@ MemberDetailsDialog::MemberDetailsDialog(const ClassMember &member, QWidget *par
     _returnButton = new QPushButton("Return", this);
 
     // 设定详细信息
-    QString details = QString("ID: %1\nName: %2\nType: %3\nMemory: %4 bytes\nDataType: %5\nAccessibility: %6")
+    QString details = QString(tr("ID: %1\nName: %2\nType: %3\nMemory: %4 bytes\nDataType: %5\nAccessibility: %6"))
             .arg(member.memberId())
             .arg(member.memberName())
             .arg(member.memberType() == MemberType::Data ? "Data" : "Function")
@@ -40,7 +40,7 @@ MemberDetailsDialog::MemberDetailsDialog(const ClassMember &member, QWidget *par
 
     setLayout(mainLayout);
     resize(400, 300);
-    setWindowTitle("Member Details");
+    setWindowTitle(tr("Member Details"));
 }
 
 void MemberDetailsDialog::onDeleteButtonClicked() {

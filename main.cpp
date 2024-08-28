@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QTextStream>
 #include <QDebug>
+#include <QTranslator>
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -20,6 +21,12 @@ int main(int argc, char *argv[])
     QTextStream stream(&file);
     QString styleSheet = stream.readAll();
     app.setStyleSheet(styleSheet);
+
+    QTranslator trans;
+    if(trans.load(":/Lang/OOPM_zh_CN.qm"))
+    {
+        app.installTranslator(&trans);
+    }
 
 
     MainWindow mainWindow;

@@ -12,7 +12,7 @@ MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *p
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QToolBar *toolBar = new QToolBar("new");
-    QAction *addAction = new QAction("Add Member", this);
+    QAction *addAction = new QAction(tr("Add Member"), this);
     addAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
     connect(addAction, &QAction::triggered, this, &MembersDetailDialog::onAddMember);
     toolBar->addAction(addAction);
@@ -29,7 +29,7 @@ MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *p
     layout->addWidget(_tableView);
 
     setLayout(layout);
-    setWindowTitle("Members Details");
+    setWindowTitle(tr("Members Details"));
     resize(900, 600);
 }
 
@@ -38,7 +38,7 @@ void MembersDetailDialog::onAddMember() {
     if (dialog.exec() == QDialog::Accepted) {
         ClassMember newMember = dialog.getClassMember();
         _members.append(newMember);
-        QMessageBox::information(this, "Member Created", QString("Member %1 created successfully!").arg(newMember.memberName()));
+        QMessageBox::information(this, tr("Member Created"), QString(tr("Member %1 created successfully!")).arg(newMember.memberName()));
         showMembers();
     }
 }
@@ -58,10 +58,10 @@ void MembersDetailDialog::onCellClicked(const QModelIndex &index) {
     int row = index.row();
     if(column == 0){
         QMessageBox msgBox;
-        msgBox.setText("你想要进行什么操作？");
-        QAbstractButton* modifyButton = msgBox.addButton("修改", QMessageBox::YesRole);
-        QAbstractButton* deleteButton = msgBox.addButton("删除", QMessageBox::NoRole);
-        msgBox.addButton("取消", QMessageBox::RejectRole);
+        msgBox.setText(tr("What do you want to do?"));
+        QAbstractButton* modifyButton = msgBox.addButton(tr("Modify"), QMessageBox::YesRole);
+        QAbstractButton* deleteButton = msgBox.addButton(tr("Delete"), QMessageBox::NoRole);
+        msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
         msgBox.exec();
 
         if(msgBox.clickedButton() == deleteButton) {
@@ -72,7 +72,7 @@ void MembersDetailDialog::onCellClicked(const QModelIndex &index) {
             if (dialog.exec() == QDialog::Accepted) {
                 ClassMember newMember = dialog.getClassMember();
                 _members[row] = newMember;
-                QMessageBox::information(this, "Member Modify", QString("Member %1 modified successfully!").arg(newMember.memberName()));
+                QMessageBox::information(this, tr("Member Modify"), QString(tr("Member %1 modified successfully!")).arg(newMember.memberName()));
                 showMembers();
             }
         }

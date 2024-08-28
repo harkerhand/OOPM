@@ -1,6 +1,6 @@
 # OOPM : Object-Oriented Project Management
 
-
+TRANSLATIONS += OOPM_zh_CN.ts
 
 QT       += core gui
 

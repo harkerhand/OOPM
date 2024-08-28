@@ -50,14 +50,14 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
     _idEdit->setValidator(idValidator);
 
     // 设置表单字段
-    formLayout->addRow("Member ID:", _idEdit);
+    formLayout->addRow(tr("Member ID:"), _idEdit);
     formLayout->addRow("", _idWarningLabel);
-    formLayout->addRow("Member Name:", _nameEdit);
+    formLayout->addRow(tr("Member Name:"), _nameEdit);
     formLayout->addRow("", _nameWarningLabel); // 在ID字段下面添加警告标签
-    formLayout->addRow("Member Type:", _memberTypeComboBox);
-    formLayout->addRow("Memory Bytes:", _memorySizeSpinBox);
-    formLayout->addRow("Data Type:", _dataTypeComboBox);
-    formLayout->addRow("Accessibility:", _accessibilityComboBox);
+    formLayout->addRow(tr("Member Type:"), _memberTypeComboBox);
+    formLayout->addRow(tr("Memory Bytes:"), _memorySizeSpinBox);
+    formLayout->addRow(tr("Data Type:"), _dataTypeComboBox);
+    formLayout->addRow(tr("Accessibility:"), _accessibilityComboBox);
 
     if(isModifyMode == true) {
         _idEdit->setText(QString::number(member.memberId()));
@@ -71,7 +71,7 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
 
 
     // 创建和取消按钮
-    _createButton = new QPushButton(isModifyMode ? "Modify" : "Create", this);
+    _createButton = new QPushButton(isModifyMode ? tr("Modify") : tr("Create"), this);
     formLayout->addRow(_createButton);
 
     connect(_memberTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CreateMemberDialog::onMemberTypeChanged);
@@ -86,7 +86,7 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
     mainLayout->addLayout(formLayout);
 
     setLayout(mainLayout);
-    setWindowTitle(isModifyMode ? "Modify" : "Create New" +  QString(" Class Member"));
+    setWindowTitle(isModifyMode ? tr("Modify") : tr("Create New") +  QString(tr(" Class Member")));
 
     onMemberTypeChanged();
     onDataTypeChanged();
@@ -121,15 +121,15 @@ void CreateMemberDialog::onDataTypeChanged() {
         DataType dataType = _dataTypeComboBox->currentData().value<DataType>();
         if (dataType == DataType::Custom) {
             bool ok;
-            int size = QInputDialog::getInt(this, "Input Size",
-                                            "Enter size for selected data type:", 0, 0, 10000, 1, &ok);
+            int size = QInputDialog::getInt(this, tr("Input Size"),
+                                            tr("Enter size for selected data type:"), 0, 0, 10000, 1, &ok);
             if (ok) {
                 _memorySizeSpinBox->setValue(size);
             }
         } else if (dataType == DataType::String) {
             bool ok;
-            std::string str = QInputDialog::getText(this, "Input String",
-                                            "Enter string for selected data type:", QLineEdit::Normal, "", &ok).toStdString();
+            std::string str = QInputDialog::getText(this, ("Input String"),
+                                            ("Enter string for selected data type:"), QLineEdit::Normal, "", &ok).toStdString();
             if (ok) {
                 _memorySizeSpinBox->setValue(sizeof(str));
             }
@@ -155,11 +155,11 @@ void CreateMemberDialog::onIdChanged(const QString &text) {
     }
 
     if (idExists) {
-        _idWarningLabel->setText("ID already exists!");
+        _idWarningLabel->setText(tr("ID already exists!"));
         _idWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
     } else if (id == 0) {
-        _idWarningLabel->setText("ID can not be empty!");
+        _idWarningLabel->setText(tr("ID can not be empty!"));
         _idWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
     } else {
@@ -170,7 +170,7 @@ void CreateMemberDialog::onIdChanged(const QString &text) {
 
 void CreateMemberDialog::onNameChanged(const QString &text) {
     if (text == "") {
-        _nameWarningLabel->setText("Name can not be empty!");
+        _nameWarningLabel->setText(tr("Name can not be empty!"));
         _nameWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
     } else {

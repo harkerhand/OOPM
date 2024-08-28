@@ -2,4 +2,7 @@
     <qresource prefix="/styles">
         <file>darkstyle.qss</file>
     </qresource>
+    <qresource prefix="/Lang">
+        <file>OOPM_zh_CN.qm</file>
+    </qresource>
 </RCC>

@@ -21,9 +21,9 @@ MainWindow::MainWindow(QWidget *parent)
     // 界面设置
     QToolBar *toolbar = addToolBar("File");
     toolbar->setFixedHeight(50);
-    QAction *loadAction = new QAction("Load Data", this);
-    QAction *saveAction = new QAction("Save Data", this);
-    QAction *addAction = new QAction("Add Class", this);
+    QAction *loadAction = new QAction(tr("Load Data"), this);
+    QAction *saveAction = new QAction(tr("Save Data"), this);
+    QAction *addAction = new QAction(tr("Add Class"), this);
 
     loadAction->setShortcut(QKeySequence::Open);
     saveAction->setShortcut(QKeySequence::Save);
@@ -63,7 +63,7 @@ void MainWindow::onAddClass() {
     if (dialog.exec() == QDialog::Accepted) {
         ClassInfo newClass = dialog.getClassInfo();
         _classes.append(newClass);
-        QMessageBox::information(this, "Class Created", QString("Class %1 created successfully!").arg(newClass.name()));
+        QMessageBox::information(this, tr("Class Created"), QString(tr("Class %1 created successfully!")).arg(newClass.name()));
     }
     displayClasses();
 }
@@ -71,14 +71,14 @@ void MainWindow::onAddClass() {
 
 
 void MainWindow::onSaveData() {
-    QString fileName = QFileDialog::getSaveFileName(this, "Save Data", "", "Data Files (*.dat)");
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Data"), "", "Data Files (*.dat)");
     if (fileName.isEmpty()) {
         return;
     }
 
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(this, "Error", "Could not save data.");
+        QMessageBox::critical(this, tr("Error"), tr("Could not save data."));
         return;
     }
 
@@ -89,18 +89,18 @@ void MainWindow::onSaveData() {
     }
 
     file.close();
-    QMessageBox::information(this, "Success", "Data saved successfully.");
+    QMessageBox::information(this, tr("Success"), tr("Data saved successfully."));
 }
 
 void MainWindow::onLoadData() {
-    QString fileName = QFileDialog::getOpenFileName(this, "Load Data", "", "Data Files (*.dat)");
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Data"), "", "Data Files (*.dat)");
     if (fileName.isEmpty()) {
         return;
     }
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(this, "Error", "Could not load data.");
+        QMessageBox::critical(this, tr("Error"), tr("Could not load data."));
         return;
     }
 
@@ -117,7 +117,7 @@ void MainWindow::onLoadData() {
 
     file.close();
     displayClasses();
-    QMessageBox::information(this, "Success", "Data loaded successfully.");
+    QMessageBox::information(this, tr("Success"), tr("Data loaded successfully."));
 }
 
 void MainWindow::displayClasses() {
@@ -140,10 +140,10 @@ void MainWindow::onCellClicked(const QModelIndex &index) {
     int row = index.row();
     if(column == 0){
         QMessageBox msgBox;
-        msgBox.setText("你想要进行什么操作？");
-        QAbstractButton* modifyButton = msgBox.addButton("修改", QMessageBox::YesRole);
-        QAbstractButton* deleteButton = msgBox.addButton("删除", QMessageBox::NoRole);
-        msgBox.addButton("取消", QMessageBox::RejectRole);
+        msgBox.setText(tr("What do you want to do?"));
+        QAbstractButton* modifyButton = msgBox.addButton(tr("Modify"), QMessageBox::YesRole);
+        QAbstractButton* deleteButton = msgBox.addButton(tr("Delete"), QMessageBox::NoRole);
+        msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
         msgBox.exec();
 
         if(msgBox.clickedButton() == deleteButton) {
@@ -154,7 +154,7 @@ void MainWindow::onCellClicked(const QModelIndex &index) {
             if (dialog.exec() == QDialog::Accepted) {
                 ClassInfo newClass = dialog.getClassInfo();
                 _classes[row] = newClass;
-                QMessageBox::information(this, "Class Created", QString("Class %1 modified successfully!").arg(newClass.name()));
+                QMessageBox::information(this, tr("Class Created"), QString(tr("Class %1 modified successfully!")).arg(newClass.name()));
                 displayClasses();
             }
         }

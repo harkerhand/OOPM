@@ -34,15 +34,15 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
     font.setPointSize(14); // 18 太大了
     _membersListWidget->setFont(font);
     // 设置表单字段
-    formLayout->addRow("ID:", _idEdit);
+    formLayout->addRow(tr("ID:"), _idEdit);
     formLayout->addRow("", _idWarningLabel); // 在ID字段下面添加警告标签
-    formLayout->addRow("Class Name:", _nameEdit);
+    formLayout->addRow(tr("Class Name:"), _nameEdit);
     formLayout->addRow("", _nameWarningLabel); // 在name字段下面添加警告标签
-    formLayout->addRow("Base Class Name:", _baseClassNameEdit);
-    formLayout->addRow("Function:", _functionEdit);
-    formLayout->addRow("Creation Date:", _creationDateEdit);
-    formLayout->addRow("Author:", _authorEdit);
-    formLayout->addRow("Members:", _membersListWidget);
+    formLayout->addRow(tr("Base Class Name:"), _baseClassNameEdit);
+    formLayout->addRow(tr("Function:"), _functionEdit);
+    formLayout->addRow(tr("Creation Date:"), _creationDateEdit);
+    formLayout->addRow(tr("Author:"), _authorEdit);
+    formLayout->addRow(tr("Members:"), _membersListWidget);
 
     if(isModifyMode == true) {
         _idEdit->setText(QString::number(classInfo.id()));
@@ -60,12 +60,12 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
     }
 
     // 添加成员按钮
-    QPushButton *addMemberButton = new QPushButton("Add Member", this);
+    QPushButton *addMemberButton = new QPushButton(tr("Add Member"), this);
     formLayout->addRow(addMemberButton);
     connect(addMemberButton, &QPushButton::clicked, this, &CreateClassDialog::onAddMemberClicked);
 
 
-    _createButton = new QPushButton(isModifyMode ? "Modify" : "Create" , this);
+    _createButton = new QPushButton(isModifyMode ? tr("Modify") : tr("Create") , this);
     formLayout->addRow(_createButton);
 
     // 将按钮的信号连接到对话框的槽函数
@@ -82,7 +82,7 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
 
     setLayout(mainLayout);
 
-    setWindowTitle((isModifyMode ? "Modify" : "Create New") + QString(" Class"));
+    setWindowTitle((isModifyMode ? tr("Modify") : tr("Create New")) + QString(tr(" Class")));
 }
 
 
@@ -103,7 +103,7 @@ void CreateClassDialog::onAddMemberClicked() {
     if (dialog.exec() == QDialog::Accepted) {
         ClassMember newMember = dialog.getClassMember();
         _members.append(newMember);
-        QMessageBox::information(this, "Member Created", QString("Member %1 created successfully!").arg(newMember.memberName()));
+        QMessageBox::information(this, tr("Member Created"), QString(tr("Member %1 created successfully!")).arg(newMember.memberName()));
         _membersListWidget->addItem(newMember.memberName());
     }
 
@@ -124,7 +124,7 @@ void CreateClassDialog::onMemberClicked(QListWidgetItem *item) {
         });
 
         if (detailsDialog.exec() == QDialog::Accepted) {
-            QMessageBox::information(this, "Member Deleted", QString("Member deleted successfully!"));
+            QMessageBox::information(this, tr("Member Deleted"), QString(tr("Member deleted successfully!")));
         }
     }
 }
@@ -145,11 +145,11 @@ void CreateClassDialog::onIdChanged(const QString &text) {
     }
 
     if (idExists) {
-        _idWarningLabel->setText("ID already exists!");
+        _idWarningLabel->setText(tr("ID already exists!"));
         _idWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
     } else if (id == 0) {
-        _idWarningLabel->setText("ID can not be empty!");
+        _idWarningLabel->setText(tr("ID can not be empty!"));
         _idWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
     } else {
@@ -160,7 +160,7 @@ void CreateClassDialog::onIdChanged(const QString &text) {
 
 void CreateClassDialog::onNameChanged(const QString &text) {
     if (text == "") {
-        _nameWarningLabel->setText("Name can not be empty!");
+        _nameWarningLabel->setText(tr("Name can not be empty!"));
         _nameWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
     } else {

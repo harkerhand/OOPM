@@ -43,13 +43,13 @@ public:
 
         if (orientation == Qt::Horizontal) {
             switch (section) {
-                case 0: return ("ID");
-                case 1: return "Class Name";
-                case 2: return "Base Class";
-                case 3: return "Function";
-                case 4: return "Creation Date";
-                case 5: return "Author";
-                case 6: return "Members";
+                case 0: return tr("ID");
+                case 1: return tr("Class Name");
+                case 2: return tr("Base Class");
+                case 3: return tr("Function");
+                case 4: return tr("Creation Date");
+                case 5: return tr("Author");
+                case 6: return tr("Members");
                 default: return QVariant();
             }
         }
