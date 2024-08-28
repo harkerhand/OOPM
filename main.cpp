@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     QFont font("小米兰亭"); // 字体名称和大小
     app.setFont(font);
 
-    QFile file("C:/Users/HarkerHand/Documents/OOPM/lightstyle.qss");
+    QFile file(":/styles/darkstyle.qss");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         // 打印错误信息到标准错误输出
         qWarning() << "Failed to open file:" << file.errorString();
