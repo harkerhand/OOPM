@@ -1,6 +1,7 @@
 # OOPM : Object-Oriented Project Management
 
-TRANSLATIONS += OOPM_zh_CN.ts
+TRANSLATIONS += langs/OOPM_zh_CN.ts \
+                langs/OOPM_en_US.ts
 
 QT       += core gui
 
@@ -17,8 +18,10 @@ SOURCES += \
     ClassMember.cpp \
     CreateClassDialog.cpp \
     CreateMemberDialog.cpp \
+    LoginWindow.cpp \
     MemberDetailsDialog.cpp \
     MembersDetailDialog.cpp \
+    UserManagementWindow.cpp \
     Utils.cpp \
     main.cpp \
     MainWindow.cpp
@@ -30,22 +33,24 @@ HEADERS += \
     CreateClassDialog.h \
     CreateMemberDialog.h \
     Enums.h \
+    LoginWindow.h \
     MainWindow.h \
     MemberDetailsDialog.h \
     MemberModel.h \
     MembersDetailDialog.h \
     SimpleTextDialog.h \
+    UserManagementWindow.h \
+    UserModel.h \
     Utils.h
 
-TRANSLATIONS += \
-    OOPM_zh_CN.ts
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES +=
+
 
 RESOURCES += \
-    darkstyle.qrc
+    resources.qrc

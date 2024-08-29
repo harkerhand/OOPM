@@ -77,7 +77,7 @@
     </message>
     <message>
         <source>Create New</source>
-        <translation>创建新</translation>
+        <translation>创建新的</translation>
     </message>
     <message>
         <source> Class</source>
@@ -148,7 +148,7 @@
     </message>
     <message>
         <source>Create New</source>
-        <translation>创建新</translation>
+        <translation>创建新的</translation>
     </message>
     <message>
         <source> Class Member</source>
@@ -176,14 +176,75 @@
     </message>
 </context>
 <context>
+    <name>LoginWindow</name>
+    <message>
+        <source>Object-Oriented Project Management</source>
+        <translation>面向对象程序项目管理系统</translation>
+    </message>
+    <message>
+        <source>Username:</source>
+        <translation>用户名：</translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation>密码：</translation>
+    </message>
+    <message>
+        <source>Login</source>
+        <translation>登陆</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation>English</translation>
+    </message>
+    <message>
+        <source>中文</source>
+        <translation>中文</translation>
+    </message>
+    <message>
+        <source>Username: %1
+Password: %2</source>
+        <translation type="vanished">用户名：%1
+密码：%2</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>日</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>夜</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>成功</translation>
+    </message>
+    <message>
+        <source>Welcome Administor!</source>
+        <translation>欢迎管理员！</translation>
+    </message>
+    <message>
+        <source>Welcome User!</source>
+        <translation>欢迎用户！</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <source>Username or password incorrect!</source>
+        <translation>用户名或密码不正确！</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Load Data</source>
-        <translation>从文件打开</translation>
+        <translation>从Dat打开</translation>
     </message>
     <message>
         <source>Save Data</source>
-        <translation>保存到文件</translation>
+        <translation>保存到Dat</translation>
     </message>
     <message>
         <source>Add Class</source>
@@ -240,6 +301,62 @@
     <message>
         <source>Class %1 modified successfully!</source>
         <translation>类%1创建成功！</translation>
+    </message>
+    <message>
+        <source>Save Data XML</source>
+        <translation type="vanished">保存到XML</translation>
+    </message>
+    <message>
+        <source>Load Data XML</source>
+        <translation type="vanished">从XML打开</translation>
+    </message>
+    <message>
+        <source>Save Data JSON</source>
+        <translation type="vanished">保存到XML</translation>
+    </message>
+    <message>
+        <source>Load Data JSON</source>
+        <translation type="vanished">从XML打开</translation>
+    </message>
+    <message>
+        <source>Save Data as XML</source>
+        <translation>保存到XML</translation>
+    </message>
+    <message>
+        <source>Load Data from XML</source>
+        <translation>从XML打开</translation>
+    </message>
+    <message>
+        <source>XML error: %1</source>
+        <translation>XML错误：%1</translation>
+    </message>
+    <message>
+        <source>Save Data as JSON</source>
+        <translation>作为JSON保存</translation>
+    </message>
+    <message>
+        <source>Load Data from JSON</source>
+        <translation>从JSON打开</translation>
+    </message>
+    <message>
+        <source>Save XML</source>
+        <translation>保存到XML</translation>
+    </message>
+    <message>
+        <source>Load XML</source>
+        <translation>从XML打开</translation>
+    </message>
+    <message>
+        <source>Save JSON</source>
+        <translation>保存到JSON</translation>
+    </message>
+    <message>
+        <source>Load JSON</source>
+        <translation>从JSON打开</translation>
+    </message>
+    <message>
+        <source>Switch Language</source>
+        <translation type="vanished">切换语言</translation>
     </message>
 </context>
 <context>
@@ -332,12 +449,70 @@ Accessibility: %6</source>
         <source>Member %1 modified successfully!</source>
         <translation>成员%1修改成功！</translation>
     </message>
+    <message>
+        <source>Total Memory Size: 0 bytes</source>
+        <translation>总占用大小：0 字节</translation>
+    </message>
+    <message>
+        <source>Total Memory Size: %1 bytes</source>
+        <translation>总占用大小：%1 字节</translation>
+    </message>
 </context>
 <context>
     <name>SimpleTextDialog</name>
     <message>
         <source>Detail</source>
         <translation>详情</translation>
+    </message>
+</context>
+<context>
+    <name>UserManagementWindow</name>
+    <message>
+        <source>Add User</source>
+        <translation>添加用户</translation>
+    </message>
+    <message>
+        <source>Delete User</source>
+        <translation>删除用户</translation>
+    </message>
+    <message>
+        <source>Save Data</source>
+        <translation>保存到Dat</translation>
+    </message>
+    <message>
+        <source>Username:</source>
+        <translation>用户名：</translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation>密码：</translation>
+    </message>
+    <message>
+        <source>Username and password cannot be empty.</source>
+        <translation>用户名和密码不能为空。</translation>
+    </message>
+    <message>
+        <source>No user selected.</source>
+        <translation>没有选中用户。</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>成功</translation>
+    </message>
+    <message>
+        <source>Save successfully!</source>
+        <translation>保存成功！</translation>
+    </message>
+</context>
+<context>
+    <name>UserModel</name>
+    <message>
+        <source>Username</source>
+        <translation>用户名</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>密码</translation>
     </message>
 </context>
 </TS>

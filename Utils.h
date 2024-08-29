@@ -4,5 +4,8 @@
 #include "Enums.h"
 
 int getDataTypeSize(DataType dataType);
-
+QString hashPassword(const QString &password);
+void saveAdminAccount(const QString &username, const QString &password);
+UserType verifyAccount(const QString &username, const QString &password);
+void saveUserAccount(const QString &username, const QString &password);
 #endif // UTILS_H

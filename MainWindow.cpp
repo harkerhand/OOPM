@@ -15,28 +15,17 @@
 #include "CreateClassDialog.h"
 #include "MemberModel.h"
 #include "MembersDetailDialog.h"
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QTranslator>
+#include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _classes() {
-    // 界面设置
-    QToolBar *toolbar = addToolBar("File");
-    toolbar->setFixedHeight(50);
-    QAction *loadAction = new QAction(tr("Load Data"), this);
-    QAction *saveAction = new QAction(tr("Save Data"), this);
-    QAction *addAction = new QAction(tr("Add Class"), this);
-
-    loadAction->setShortcut(QKeySequence::Open);
-    saveAction->setShortcut(QKeySequence::Save);
-    addAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
-    toolbar->addAction(loadAction);
-    toolbar->addAction(saveAction);
-    toolbar->addAction(addAction);
-
-    connect(loadAction, &QAction::triggered, this, &MainWindow::onLoadData);
-    connect(saveAction, &QAction::triggered, this, &MainWindow::onSaveData);
-    connect(addAction, &QAction::triggered, this, &MainWindow::onAddClass);
-
-
+    setupToolbar();
 
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
@@ -46,14 +35,61 @@ MainWindow::MainWindow(QWidget *parent)
     //自动调整
     _tableView->horizontalHeader()->setStretchLastSection(true);
     _tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
+    _tableView->setStyleSheet(
+            "QTableView {"
+            "    background-image: url(:/imgs/bgtext.png);"
+            "    background-repeat: no-repeat;"
+            "    background-position: center;"
+            "}"
+        );
     layout->addWidget(_tableView);
 
     setCentralWidget(centralWidget);
-    setMinimumSize(1080, 720);
+    setMinimumSize(1200, 720);
     displayClasses();
 
     connect(_tableView, &QTableView::clicked, this, &MainWindow::onCellClicked);
+
+}
+
+void MainWindow::setupToolbar() {
+    QToolBar *toolbar = addToolBar("File");
+    toolbar->setFixedHeight(50);
+
+    QAction *loadAction = new QAction(tr("Load Data"), this);
+    QAction *saveAction = new QAction(tr("Save Data"), this);
+    QAction *addAction = new QAction(tr("Add Class"), this);
+    QAction *saveXMLAction = new QAction(tr("Save XML"), this);
+    QAction *loadXMLAction = new QAction(tr("Load XML"), this);
+    QAction *saveJSONAction = new QAction(tr("Save JSON"), this);
+    QAction *loadJSONAction = new QAction(tr("Load JSON"), this);
+
+    loadAction->setShortcut(QKeySequence::Open);
+    saveAction->setShortcut(QKeySequence::Save);
+    addAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
+    saveXMLAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
+    loadXMLAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
+    saveJSONAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
+    loadJSONAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_K));
+
+
+
+    toolbar->addAction(addAction);
+    toolbar->addAction(loadAction);
+    toolbar->addAction(saveAction);
+    toolbar->addAction(loadXMLAction);
+    toolbar->addAction(saveXMLAction);
+    toolbar->addAction(loadJSONAction);
+    toolbar->addAction(saveJSONAction);
+
+
+    connect(loadAction, &QAction::triggered, this, &MainWindow::onLoadData);
+    connect(saveAction, &QAction::triggered, this, &MainWindow::onSaveData);
+    connect(addAction, &QAction::triggered, this, &MainWindow::onAddClass);
+    connect(saveXMLAction, &QAction::triggered, this, &MainWindow::onSaveDataXML);
+    connect(loadXMLAction, &QAction::triggered, this, &MainWindow::onLoadDataXML);
+    connect(saveJSONAction, &QAction::triggered, this, &MainWindow::onSaveDataJSON);
+    connect(loadJSONAction, &QAction::triggered, this, &MainWindow::onLoadDataJSON);
 
 }
 
@@ -121,8 +157,6 @@ void MainWindow::onLoadData() {
 }
 
 void MainWindow::displayClasses() {
-    // 示例：显示所有类的信息
-    // 可以使用 QStandardItemModel 或其他方式展示
     _tableView->clearSpans();
     ClassModel *model = new ClassModel(_classes, this);
     _tableView->setModel(model);
@@ -176,4 +210,251 @@ void MainWindow::onCellClicked(const QModelIndex &index) {
     }
 }
 
+void MainWindow::onSaveDataXML() {
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Data as XML"), "", "XML Files (*.xml)");
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, tr("Error"), tr("Could not save data."));
+        return;
+    }
+
+    QXmlStreamWriter xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("Classes");
+
+    for (const ClassInfo &classInfo : _classes) {
+        xmlWriter.writeStartElement("Class");
+        xmlWriter.writeTextElement("ID", QString::number(classInfo.id()));
+        xmlWriter.writeTextElement("Name", classInfo.name());
+        xmlWriter.writeTextElement("BaseClassName", classInfo.baseClassName());
+        xmlWriter.writeTextElement("Function", classInfo.function());
+        xmlWriter.writeTextElement("CreationDate", classInfo.creationDate().toString(Qt::ISODate));
+        xmlWriter.writeTextElement("Author", classInfo.author());
+
+        xmlWriter.writeStartElement("Members");
+        for (const ClassMember &member : classInfo.members()) {
+            xmlWriter.writeStartElement("Member");
+            xmlWriter.writeTextElement("MemberID", QString::number(member.memberId()));
+            xmlWriter.writeTextElement("MemberName", member.memberName());
+            xmlWriter.writeTextElement("MemberType", memberTypeToString(member.memberType()));
+            xmlWriter.writeTextElement("MemorySize", QString::number(member.memorySize()));
+            xmlWriter.writeTextElement("DataType", dataTypeToString(member.dataType()));
+            xmlWriter.writeTextElement("Accessibility", accessibilityToString(member.accessibility()));
+            xmlWriter.writeEndElement();
+        }
+        xmlWriter.writeEndElement();
+        xmlWriter.writeEndElement();
+    }
+
+    xmlWriter.writeEndElement();
+    xmlWriter.writeEndDocument();
+
+    file.close();
+    QMessageBox::information(this, tr("Success"), tr("Data saved successfully."));
+}
+
+void MainWindow::onLoadDataXML() {
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Data from XML"), "", "XML Files (*.xml)");
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, tr("Error"), tr("Could not load data."));
+        return;
+    }
+
+    QXmlStreamReader xmlReader(&file);
+    _classes.clear();
+
+    while (!xmlReader.atEnd() && !xmlReader.hasError()) {
+        QXmlStreamReader::TokenType token = xmlReader.readNext();
+        if (token == QXmlStreamReader::StartElement) {
+            if (xmlReader.name() == "Class") {
+                ClassInfo classInfo;
+                while (!(xmlReader.tokenType() == QXmlStreamReader::EndElement && xmlReader.name() == "Class")) {
+                    if (xmlReader.tokenType() == QXmlStreamReader::StartElement) {
+                        if (xmlReader.name() == "ID") {
+                            classInfo.setId(xmlReader.readElementText().toInt());
+                        } else if (xmlReader.name() == "Name") {
+                            classInfo.setName(xmlReader.readElementText());
+                        } else if (xmlReader.name() == "BaseClassName") {
+                            classInfo.setBaseClassName(xmlReader.readElementText());
+                        } else if (xmlReader.name() == "Function") {
+                            classInfo.setFunction(xmlReader.readElementText());
+                        } else if (xmlReader.name() == "CreationDate") {
+                            classInfo.setCreationDate(QDateTime::fromString(xmlReader.readElementText(), Qt::ISODate));
+                        } else if (xmlReader.name() == "Author") {
+                            classInfo.setAuthor(xmlReader.readElementText());
+                        } else if (xmlReader.name() == "Members") {
+                            while (!(xmlReader.tokenType() == QXmlStreamReader::EndElement && xmlReader.name() == "Members")) {
+                                if (xmlReader.tokenType() == QXmlStreamReader::StartElement && xmlReader.name() == "Member") {
+                                    ClassMember member;
+                                    while (!(xmlReader.tokenType() == QXmlStreamReader::EndElement && xmlReader.name() == "Member")) {
+                                        if (xmlReader.tokenType() == QXmlStreamReader::StartElement) {
+                                            if (xmlReader.name() == "MemberID") {
+                                                member.setMemberId(xmlReader.readElementText().toInt());
+                                            } else if (xmlReader.name() == "MemberName") {
+                                                member.setMemberName(xmlReader.readElementText());
+                                            } else if (xmlReader.name() == "MemberType") {
+                                                QString type = xmlReader.readElementText();
+                                                member.setMemberType(
+                                                    type == "Data" ? MemberType::Data : MemberType::Function
+                                                );
+                                            } else if (xmlReader.name() == "MemorySize") {
+                                                member.setMemorySize(xmlReader.readElementText().toInt());
+                                            } else if (xmlReader.name() == "DataType") {
+                                                QString type = xmlReader.readElementText();
+                                                member.setDataType(
+                                                    type == "Int" ? DataType::Int :
+                                                    type == "Float" ? DataType::Float :
+                                                    type == "Double" ? DataType::Double :
+                                                    type == "Char" ? DataType::Char :
+                                                    type == "String" ? DataType::String :
+                                                    DataType::Custom
+                                                );
+                                            } else if (xmlReader.name() == "Accessibility") {
+                                                QString access = xmlReader.readElementText();
+                                                member.setAccessibility(
+                                                    access == "Public" ? Accessibility::Public :
+                                                    access == "Private" ? Accessibility::Private :
+                                                    Accessibility::Protected
+                                                );
+                                            }
+                                        }
+                                        xmlReader.readNext();
+                                    }
+                                    classInfo.addMember(member);
+                                }
+                                xmlReader.readNext();
+                            }
+                        }
+                    }
+                    xmlReader.readNext();
+                }
+                _classes.append(classInfo);
+            }
+        }
+    }
+
+    if (xmlReader.hasError()) {
+        QMessageBox::critical(this, tr("Error"), tr("XML error: %1").arg(xmlReader.errorString()));
+    }
+
+    file.close();
+    displayClasses();
+    QMessageBox::information(this, tr("Success"), tr("Data loaded successfully."));
+}
+
+void MainWindow::onSaveDataJSON() {
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Data as JSON"), "", "JSON Files (*.json)");
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, tr("Error"), tr("Could not save data."));
+        return;
+    }
+
+    QJsonArray classArray;
+    for (const ClassInfo &classInfo : _classes) {
+        QJsonObject classObject;
+        classObject["ID"] = classInfo.id();
+        classObject["Name"] = classInfo.name();
+        classObject["BaseClassName"] = classInfo.baseClassName();
+        classObject["Function"] = classInfo.function();
+        classObject["CreationDate"] = classInfo.creationDate().toString(Qt::ISODate);
+        classObject["Author"] = classInfo.author();
+
+        QJsonArray membersArray;
+        for (const ClassMember &member : classInfo.members()) {
+            QJsonObject memberObject;
+            memberObject["MemberID"] = member.memberId();
+            memberObject["MemberName"] = member.memberName();
+            memberObject["MemberType"] = memberTypeToString(member.memberType());
+            memberObject["MemorySize"] = member.memorySize();
+            memberObject["DataType"] = dataTypeToString(member.dataType());
+            memberObject["Accessibility"] = accessibilityToString(member.accessibility());
+            membersArray.append(memberObject);
+        }
+        classObject["Members"] = membersArray;
+        classArray.append(classObject);
+    }
+
+    QJsonDocument jsonDoc(classArray);
+    file.write(jsonDoc.toJson());
+
+    file.close();
+    QMessageBox::information(this, tr("Success"), tr("Data saved successfully."));
+}
+
+void MainWindow::onLoadDataJSON() {
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Data from JSON"), "", "JSON Files (*.json)");
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, tr("Error"), tr("Could not load data."));
+        return;
+    }
+
+    QByteArray jsonData = file.readAll();
+    QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonData));
+    QJsonArray classArray = jsonDoc.array();
+
+    _classes.clear();
+    for (const QJsonValue &value : classArray) {
+        QJsonObject classObject = value.toObject();
+        ClassInfo classInfo;
+        classInfo.setId(classObject["ID"].toInt());
+        classInfo.setName(classObject["Name"].toString());
+        classInfo.setBaseClassName(classObject["BaseClassName"].toString());
+        classInfo.setFunction(classObject["Function"].toString());
+        classInfo.setCreationDate(QDateTime::fromString(classObject["CreationDate"].toString(), Qt::ISODate));
+        classInfo.setAuthor(classObject["Author"].toString());
+
+        QJsonArray membersArray = classObject["Members"].toArray();
+        for (const QJsonValue &memberValue : membersArray) {
+            QJsonObject memberObject = memberValue.toObject();
+            ClassMember member;
+            member.setMemberId(memberObject["MemberID"].toInt());
+            member.setMemberName(memberObject["MemberName"].toString());
+            QString type = memberObject["MemberType"].toString();
+            member.setMemberType(
+                type == "Data" ? MemberType::Data : MemberType::Function
+            );
+            member.setMemorySize(memberObject["MemorySize"].toInt());
+            member.setDataType(
+                memberObject["DataType"].toString() == "Int" ? DataType::Int :
+                memberObject["DataType"].toString() == "Float" ? DataType::Float :
+                memberObject["DataType"].toString() == "Double" ? DataType::Double :
+                memberObject["DataType"].toString() == "Char" ? DataType::Char :
+                memberObject["DataType"].toString() == "String" ? DataType::String :
+                DataType::Custom
+            );
+            QString access = memberObject["Accessibility"].toString();
+            member.setAccessibility(
+                access == "Public" ? Accessibility::Public :
+                access == "Private" ? Accessibility::Private :
+                Accessibility::Protected
+            );
+            classInfo.addMember(member);
+        }
+        _classes.append(classInfo);
+    }
+
+    file.close();
+    displayClasses();
+    QMessageBox::information(this, tr("Success"), tr("Data loaded successfully."));
+}
 

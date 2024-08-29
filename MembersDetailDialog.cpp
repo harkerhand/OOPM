@@ -22,15 +22,20 @@ MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *p
     _tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     connect(_tableView, &QTableView::clicked, this, &MembersDetailDialog::onCellClicked);
 
-    showMembers();
+
+    _totalSizeLabel = new QLabel(tr("Total Memory Size: 0 bytes"), this); // 确保初始值
+
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(toolBar);
     layout->addWidget(_tableView);
+    layout->addWidget(_totalSizeLabel);
 
     setLayout(layout);
     setWindowTitle(tr("Members Details"));
+    updateTotalSize(); // 初始化时更新总内存大小显示
     resize(900, 600);
+    showMembers();
 }
 
 void MembersDetailDialog::onAddMember() {
@@ -47,6 +52,7 @@ void MembersDetailDialog::showMembers() {
     _tableView->clearSpans();
     _model = new MemberModel(_members, this);
     _tableView->setModel(_model);
+    updateTotalSize();
 }
 
 
@@ -77,4 +83,12 @@ void MembersDetailDialog::onCellClicked(const QModelIndex &index) {
             }
         }
     }
+}
+
+void MembersDetailDialog::updateTotalSize() {
+    int totalSize = 0;
+    for (const auto &member : _members) {
+        totalSize += member.memorySize(); // 返回该成员的内存大小
+    }
+    _totalSizeLabel->setText(tr("Total Memory Size: %1 bytes").arg(totalSize));
 }

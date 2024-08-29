@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>styles/darkstyle.qss</file>
+        <file>styles/lightstyle.qss</file>
+        <file>langs/OOPM_zh_CN.qm</file>
+        <file>langs/OOPM_en_US.qm</file>
+        <file>imgs/low.png</file>
+        <file>imgs/darkBg.png</file>
+        <file>imgs/lightBg.png</file>
+        <file>imgs/bgtext.png</file>
+        <file>passports/admin.dat</file>
+    </qresource>
+</RCC>

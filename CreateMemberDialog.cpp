@@ -140,21 +140,29 @@ void CreateMemberDialog::onDataTypeChanged() {
     }
 }
 
-void CreateMemberDialog::onIdChanged(const QString &text) {
-    if (_isModifyMode) {
-        return;  // 修改模式不进行检查
-    }
 
+bool CreateMemberDialog::isIdExists() {
     bool idExists = false;
-    int id = text.toInt();
+    int id = _idEdit->text().toInt();
     for (const ClassMember &existingMember : _members) {
         if (existingMember.memberId() == id) {
             idExists = true;
             break;
         }
     }
+    return idExists;
+}
 
-    if (idExists) {
+void CreateMemberDialog::onIdChanged(const QString &text) {
+    if (_isModifyMode) {
+        return;  // 修改模式不进行检查
+    }
+
+
+    int id = text.toInt();
+
+
+    if (isIdExists()) {
         _idWarningLabel->setText(tr("ID already exists!"));
         _idWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
@@ -164,7 +172,7 @@ void CreateMemberDialog::onIdChanged(const QString &text) {
         _createButton->setEnabled(false);
     } else {
         _idWarningLabel->setVisible(false);
-        _createButton->setEnabled(true);
+        if(_nameEdit->text() != "")  _createButton->setEnabled(true);
     }
 }
 
@@ -175,6 +183,6 @@ void CreateMemberDialog::onNameChanged(const QString &text) {
         _createButton->setEnabled(false);
     } else {
         _nameWarningLabel->setVisible(false);
-        _createButton->setEnabled(true);
+        if(_idEdit->text().toInt() != 0 && isIdExists() == false) _createButton->setEnabled(true);
     }
 }

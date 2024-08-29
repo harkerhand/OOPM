@@ -129,22 +129,24 @@ void CreateClassDialog::onMemberClicked(QListWidgetItem *item) {
     }
 }
 
-
-void CreateClassDialog::onIdChanged(const QString &text) {
-    if (_isModifyMode) {
-        return;  // 修改模式不进行检查
-    }
-
+bool CreateClassDialog::isIdExists() {
     bool idExists = false;
-    int id = text.toInt();
+    int id = _idEdit->text().toInt();
     for (const ClassInfo &existingClass : _classes) {
         if (existingClass.id() == id) {
             idExists = true;
             break;
         }
     }
+    return idExists;
+}
 
-    if (idExists) {
+void CreateClassDialog::onIdChanged(const QString &text) {
+    if (_isModifyMode) {
+        return;  // 修改模式不进行检查
+    }
+    int id = text.toInt();
+    if (isIdExists()) {
         _idWarningLabel->setText(tr("ID already exists!"));
         _idWarningLabel->setVisible(true);
         _createButton->setEnabled(false);
@@ -154,7 +156,8 @@ void CreateClassDialog::onIdChanged(const QString &text) {
         _createButton->setEnabled(false);
     } else {
         _idWarningLabel->setVisible(false);
-        _createButton->setEnabled(true);
+        if(_nameEdit->text() != "")
+            _createButton->setEnabled(true);
     }
 }
 
@@ -165,6 +168,6 @@ void CreateClassDialog::onNameChanged(const QString &text) {
         _createButton->setEnabled(false);
     } else {
         _nameWarningLabel->setVisible(false);
-        _createButton->setEnabled(true);
+        if(_nameEdit->text().toInt() != 0 && isIdExists() == false) _createButton->setEnabled(true);
     }
 }

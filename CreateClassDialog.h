@@ -43,6 +43,7 @@ private:
     QPushButton *_createButton;
     bool _isModifyMode;
     const QList<ClassInfo> &_classes;
+    bool isIdExists();
 };
 
 

@@ -1,35 +1,27 @@
 #include "MainWindow.h"
 
 #include <QApplication>
-#include <QTextStream>
-#include <QDebug>
-#include <QTranslator>
+#include "Utils.h"
+#include "LoginWindow.h"
+
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    QFont font("小米兰亭"); // 字体名称和大小
+    QFont font("小米兰亭");
     app.setFont(font);
 
-    QFile file(":/styles/darkstyle.qss");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        // 打印错误信息到标准错误输出
-        qWarning() << "Failed to open file:" << file.errorString();
-        return -1; // 或者其他错误处理
-    }
-
-    QTextStream stream(&file);
-    QString styleSheet = stream.readAll();
-    app.setStyleSheet(styleSheet);
-
-    QTranslator trans;
-    if(trans.load(":/Lang/OOPM_zh_CN.qm"))
-    {
-        app.installTranslator(&trans);
-    }
 
 
-    MainWindow mainWindow;
-    mainWindow.show();
+
+
+//    MainWindow mainWindow;
+//    mainWindow.show();
+
+    LoginWindow loginWindow;
+    loginWindow.show();
+
+
     return app.exec();
 }

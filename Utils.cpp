@@ -1,5 +1,11 @@
 #include "Utils.h"
+#include <QCryptographicHash>
+#include <QString>
+#include <QFile>
+#include <QDataStream>
 
+#include <QFileInfo>
+#include <QDebug>
 
 int getDataTypeSize(DataType dataType) {
     switch (dataType) {
@@ -18,4 +24,83 @@ int getDataTypeSize(DataType dataType) {
         default:
             return 0; // 默认返回 0
     }
+}
+
+QString hashPassword(const QString &password) {
+    QByteArray passwordBytes = password.toUtf8();
+    QByteArray hash = QCryptographicHash::hash(passwordBytes, QCryptographicHash::Sha256);
+    return hash.toHex(); // 将哈希值转换为十六进制字符串
+}
+
+void saveAdminAccount(const QString &username, const QString &password) {
+    QString filePath;
+    QString hashedPassword = hashPassword(password);
+
+    QFile file(filePath);
+    QFileInfo fileInfo(filePath);
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        printf("001");
+        return;
+    }
+    QDataStream stream(&file);
+    stream << username << hashedPassword;
+    file.close();
+}
+
+void saveUserAccount(const QString &username, const QString &password) {
+    QString hashedPassword = hashPassword(password);
+    QString filePath = "C:/Users/HarkerHand/Documents/OOPM/passports/users.dat";
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+        return;
+    }
+    QDataStream stream(&file);
+    stream << username << hashedPassword;
+    file.close();
+}
+
+
+UserType verifyAccount(const QString &username, const QString &password) {
+    const QString adminFilePath = ":/passports/admin.dat";
+    const QString userFilePath = "C:/Users/HarkerHand/Documents/OOPM/passports/users.dat";
+    QString hashedPassword = hashPassword(password);
+
+    // 验证管理员账号
+    QFile adminFile(adminFilePath);
+    if (!adminFile.open(QIODevice::ReadOnly)) {
+        qDebug() << adminFilePath;
+        return UserType::Invalid;
+    } else {
+        QDataStream stream(&adminFile);
+        QString fileUsername, fileHash;
+        while (!stream.atEnd()) {
+            stream >> fileUsername >> fileHash;
+            if (fileUsername == username && fileHash == hashedPassword) {
+                adminFile.close();
+                return UserType::Admin; // 管理员账号和密码匹配
+            }
+        }
+    }
+    adminFile.close();
+
+    // 验证用户账号
+    QFile userFile(userFilePath);
+    if (!userFile.open(QIODevice::ReadOnly)) {
+        printf("004");
+        return UserType::Invalid;
+    } else {
+        QDataStream stream(&userFile);
+        QString fileUsername, fileHash;
+        while (!stream.atEnd()) {
+            stream >> fileUsername >> fileHash;
+            if (fileUsername == username && fileHash == hashedPassword) {
+                userFile.close();
+                return UserType::User; // 用户账号和密码匹配
+            }
+        }
+        userFile.close();
+    }
+
+    return UserType::Invalid; // 账号或密码错误
 }

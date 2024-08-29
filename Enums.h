@@ -25,6 +25,11 @@ enum class DataType {
     Custom // 用于表示自定义的数据类型
 };
 
+enum class UserType {
+    Admin,
+    User,
+    Invalid
+};
 
 Q_DECLARE_METATYPE(MemberType)
 Q_DECLARE_METATYPE(Accessibility)

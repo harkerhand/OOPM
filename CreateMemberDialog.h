@@ -34,6 +34,7 @@ private:
     QPushButton *_createButton;
     QLabel *_idWarningLabel;
     QLabel *_nameWarningLabel;
+    bool isIdExists();
 };
 
 #endif // CREATEMEMBERDIALOG_H

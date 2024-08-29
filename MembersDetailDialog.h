@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QList>
+#include <QLabel>
 #include "ClassMember.h"
 #include "MemberModel.h"
 
@@ -23,11 +24,13 @@ public:
 private slots:
     void onAddMember();
     void onCellClicked(const QModelIndex &index);
+    void updateTotalSize();
 
 private:
     QList<ClassMember> _members;
     QTableView *_tableView;
     MemberModel *_model;
+    QLabel *_totalSizeLabel;
 };
 
 #endif // MEMBERSDETAILDIALOG_H
