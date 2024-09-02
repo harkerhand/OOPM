@@ -18,6 +18,7 @@ private slots:
     void onAddUser();
     void onDeleteUser();
     void saveUserData();
+    void onBackToLogin();
 private:
     void setupUI();
     void loadUserData();
@@ -29,6 +30,7 @@ private:
     QPushButton *_saveButton;
     QLineEdit *_usernameEdit;
     QLineEdit *_passwordEdit;
+    QPushButton *_backToLogin;
     QList<QPair<QString, QString>> _users;
 };
 

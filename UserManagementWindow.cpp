@@ -11,6 +11,7 @@
 #include <QHeaderView>
 #include <QRegularExpressionValidator>
 #include <QRegularExpression>
+#include "LoginWindow.h"
 
 UserManagementWindow::UserManagementWindow(QWidget *parent)
     : QWidget(parent) {
@@ -24,6 +25,7 @@ void UserManagementWindow::setupUI() {
     _saveButton = new QPushButton(tr("Save Data"), this);
     _usernameEdit = new QLineEdit(this);
     _passwordEdit = new QLineEdit(this);
+    _backToLogin = new QPushButton(tr("Back Login"), this);
 
     QRegularExpression regex("[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]+");
     QRegularExpressionValidator *validator = new QRegularExpressionValidator(regex, this);
@@ -50,11 +52,13 @@ void UserManagementWindow::setupUI() {
     buttonLayout->addWidget(_addButton);
     buttonLayout->addWidget(_deleteButton);
     buttonLayout->addWidget(_saveButton);
+    buttonLayout->addWidget(_backToLogin);
     mainLayout->addLayout(buttonLayout);
 
     connect(_addButton, &QPushButton::clicked, this, &UserManagementWindow::onAddUser);
     connect(_deleteButton, &QPushButton::clicked, this, &UserManagementWindow::onDeleteUser);
     connect(_saveButton, &QPushButton::clicked, this, &UserManagementWindow::saveUserData);
+    connect(_backToLogin, &QPushButton::clicked, this, &UserManagementWindow::onBackToLogin);
 }
 
 void UserManagementWindow::showUsers() {
@@ -88,8 +92,8 @@ void UserManagementWindow::saveUserData() {
     }
     for (const auto &user : _users) {
         QString username = user.first;
-        QString hashedPassword = user.second;
-        saveUserAccount(username, hashedPassword);
+        QString password = user.second;
+        saveUserAccount(username, password);
      }
     QMessageBox::information(this, tr("Success"), tr("Save successfully!"));
 }
@@ -99,6 +103,10 @@ void UserManagementWindow::onAddUser() {
     QString password = _passwordEdit->text();
     if (username.isEmpty() || password.isEmpty()) {
         QMessageBox::warning(this, tr("Add User"), tr("Username and password cannot be empty."));
+        return;
+    }
+    if(_passwordEdit->text().length() < 6) {
+        QMessageBox::warning(this, tr("Add User"), tr("Password cannot be less than six digits."));
         return;
     }
     _users.append(qMakePair(username, password));
@@ -120,3 +128,9 @@ void UserManagementWindow::onDeleteUser() {
     showUsers();
 }
 
+void UserManagementWindow::onBackToLogin() {
+    saveUserData();
+    LoginWindow *login = new LoginWindow();
+    login->show();
+    this->close();
+}

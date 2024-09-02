@@ -562,6 +562,14 @@ Accessibility: %6</source>
         <source>Save successfully!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Back Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password cannot be less than six digits.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserModel</name>
@@ -571,6 +579,10 @@ Accessibility: %6</source>
     </message>
     <message>
         <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hashed Password</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

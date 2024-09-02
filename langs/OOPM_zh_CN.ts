@@ -594,6 +594,14 @@ Accessibility: %6</source>
         <source>Save successfully!</source>
         <translation>保存成功！</translation>
     </message>
+    <message>
+        <source>Back Login</source>
+        <translation>返回到登陆</translation>
+    </message>
+    <message>
+        <source>Password cannot be less than six digits.</source>
+        <translation>密码不能低于六位。</translation>
+    </message>
 </context>
 <context>
     <name>UserModel</name>
@@ -604,6 +612,10 @@ Accessibility: %6</source>
     <message>
         <source>Password</source>
         <translation>密码</translation>
+    </message>
+    <message>
+        <source>Hashed Password</source>
+        <translation>已加密的密码</translation>
     </message>
 </context>
 </TS>

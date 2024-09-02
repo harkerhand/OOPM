@@ -31,6 +31,7 @@ int getDataTypeSize(DataType dataType) {
 }
 
 QString hashPassword(const QString &password) {
+    if(password.length() == 64) return password;
     QByteArray passwordBytes = password.toUtf8();
     QByteArray hash = QCryptographicHash::hash(passwordBytes, QCryptographicHash::Sha256);
     return hash.toHex(); // 将哈希值转换为十六进制字符串
@@ -53,6 +54,7 @@ void saveAdminAccount(const QString &username, const QString &password) {
 }
 
 void saveUserAccount(const QString &username, const QString &password) {
+
     QString hashedPassword = hashPassword(password);
     QFile file(USER_FILE_PATH);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Append)) {

@@ -27,8 +27,10 @@ public:
         const auto &item = _users[index.row()];
         if (index.column() == 0)
             return item.first; // Username
-        else if (index.column() == 1)
-            return item.second; // Hashed password
+        else if (index.column() == 1) {
+            if(item.second.length() == 64) return tr("Hashed Password");
+            else return item.second; // Hashed password
+        }
 
         return QVariant();
     }
