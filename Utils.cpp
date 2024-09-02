@@ -3,9 +3,13 @@
 #include <QString>
 #include <QFile>
 #include <QDataStream>
-
+#include <QStandardPaths>
 #include <QFileInfo>
 #include <QDebug>
+
+QString documentsPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+QString USER_FILE_PATH = documentsPath + "/OOPM/passports/users.dat";
+
 
 int getDataTypeSize(DataType dataType) {
     switch (dataType) {
@@ -50,8 +54,7 @@ void saveAdminAccount(const QString &username, const QString &password) {
 
 void saveUserAccount(const QString &username, const QString &password) {
     QString hashedPassword = hashPassword(password);
-    QString filePath = "C:/Users/HarkerHand/Documents/OOPM/passports/users.dat";
-    QFile file(filePath);
+    QFile file(USER_FILE_PATH);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Append)) {
         return;
     }
@@ -62,8 +65,8 @@ void saveUserAccount(const QString &username, const QString &password) {
 
 
 UserType verifyAccount(const QString &username, const QString &password) {
+    qDebug() << USER_FILE_PATH;
     const QString adminFilePath = ":/passports/admin.dat";
-    const QString userFilePath = "C:/Users/HarkerHand/Documents/OOPM/passports/users.dat";
     QString hashedPassword = hashPassword(password);
 
     // 验证管理员账号
@@ -85,7 +88,7 @@ UserType verifyAccount(const QString &username, const QString &password) {
     adminFile.close();
 
     // 验证用户账号
-    QFile userFile(userFilePath);
+    QFile userFile(USER_FILE_PATH);
     if (!userFile.open(QIODevice::ReadOnly)) {
         printf("004");
         return UserType::Invalid;

@@ -123,8 +123,8 @@ void LoginWindow::setupUI() {
     themeWidget->setStyleSheet("background-color: transparent;");
 
     QVBoxLayout *bottomLayout = new QVBoxLayout();
-    bottomLayout->addWidget(themeWidget, 0, Qt::AlignBottom | Qt::AlignRight);
-    bottomLayout->addWidget(langWidget, 0, Qt::AlignBottom | Qt::AlignRight);
+    bottomLayout->addWidget(themeWidget, 0, Qt::AlignHCenter);
+    bottomLayout->addWidget(langWidget, 0, Qt::AlignHCenter);
 
     QWidget *bottomWidget = new QWidget();
     bottomWidget->setLayout(bottomLayout);
@@ -134,7 +134,7 @@ void LoginWindow::setupUI() {
     QVBoxLayout *windowLayout = new QVBoxLayout();
     windowLayout->addWidget(_titleLabel);
     windowLayout->addWidget(centralWidget);
-    windowLayout->addWidget(bottomWidget);
+    windowLayout->addWidget(bottomWidget, 0, Qt::AlignBottom | Qt::AlignRight);
 
     setLayout(windowLayout);
 

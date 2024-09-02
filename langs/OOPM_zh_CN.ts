@@ -174,6 +174,14 @@
         <source>Name can not be empty!</source>
         <translation>名字不能为空！</translation>
     </message>
+    <message>
+        <source>Input String</source>
+        <translation>输入字符串</translation>
+    </message>
+    <message>
+        <source>Enter string for selected data type:</source>
+        <translation>请输入：</translation>
+    </message>
 </context>
 <context>
     <name>LoginWindow</name>
@@ -357,6 +365,22 @@ Password: %2</source>
     <message>
         <source>Switch Language</source>
         <translation type="vanished">切换语言</translation>
+    </message>
+    <message>
+        <source>Back Login</source>
+        <translation>返回到登陆</translation>
+    </message>
+    <message>
+        <source>Data</source>
+        <translation>Data</translation>
+    </message>
+    <message>
+        <source>XML</source>
+        <translation>XML</translation>
+    </message>
+    <message>
+        <source>JSON</source>
+        <translation>JSON</translation>
     </message>
 </context>
 <context>

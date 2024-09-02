@@ -24,7 +24,7 @@ private slots:
     void onSaveDataJSON();
     void onLoadDataJSON();
     void onCellClicked(const QModelIndex &index);
-
+    void onBackToLogin();
 private:
     void updateUI();
     QList<ClassInfo> _classes;

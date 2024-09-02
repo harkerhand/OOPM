@@ -65,8 +65,7 @@ void UserManagementWindow::showUsers() {
 
 
 void UserManagementWindow::loadUserData() {
-    QString filePath = "C:/Users/HarkerHand/Documents/OOPM/passports/users.dat";
-    QFile file(filePath);
+    QFile file(USER_FILE_PATH);
     if (file.open(QIODevice::ReadOnly)) {
         QDataStream stream(&file);
         while (!stream.atEnd()) {
@@ -83,8 +82,7 @@ void UserManagementWindow::loadUserData() {
 }
 
 void UserManagementWindow::saveUserData() {
-    QString filePath = "C:/Users/HarkerHand/Documents/OOPM/passports/users.dat";
-    QFile file(filePath);
+    QFile file(USER_FILE_PATH);
     if (file.open(QIODevice::WriteOnly)) {
         file.close();
     }

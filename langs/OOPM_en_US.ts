@@ -173,6 +173,14 @@
         <source>Name can not be empty!</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Input String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter string for selected data type:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LoginWindow</name>
@@ -330,6 +338,22 @@
     <message>
         <source>Load JSON</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Back Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>JSON</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

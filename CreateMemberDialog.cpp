@@ -128,8 +128,8 @@ void CreateMemberDialog::onDataTypeChanged() {
             }
         } else if (dataType == DataType::String) {
             bool ok;
-            std::string str = QInputDialog::getText(this, ("Input String"),
-                                            ("Enter string for selected data type:"), QLineEdit::Normal, "", &ok).toStdString();
+            std::string str = QInputDialog::getText(this, tr("Input String"),
+                                            tr("Enter string for selected data type:"), QLineEdit::Normal, "", &ok).toStdString();
             if (ok) {
                 _memorySizeSpinBox->setValue(sizeof(str));
             }

@@ -22,6 +22,9 @@
 #include <QJsonArray>
 #include <QTranslator>
 #include <QApplication>
+#include <QToolButton>
+#include <QMenu>
+#include "LoginWindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _classes() {
@@ -56,40 +59,64 @@ void MainWindow::setupToolbar() {
     QToolBar *toolbar = addToolBar("File");
     toolbar->setFixedHeight(50);
 
-    QAction *loadAction = new QAction(tr("Load Data"), this);
-    QAction *saveAction = new QAction(tr("Save Data"), this);
+    QAction *loadDataAction = new QAction(tr("Load Data"), this);
+    QAction *saveDataAction = new QAction(tr("Save Data"), this);
     QAction *addAction = new QAction(tr("Add Class"), this);
     QAction *saveXMLAction = new QAction(tr("Save XML"), this);
     QAction *loadXMLAction = new QAction(tr("Load XML"), this);
     QAction *saveJSONAction = new QAction(tr("Save JSON"), this);
     QAction *loadJSONAction = new QAction(tr("Load JSON"), this);
+    QAction *backToLogin = new QAction(tr("Back Login"), this);
 
-    loadAction->setShortcut(QKeySequence::Open);
-    saveAction->setShortcut(QKeySequence::Save);
+    loadDataAction->setShortcut(QKeySequence::Open);
+    saveDataAction->setShortcut(QKeySequence::Save);
     addAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
     saveXMLAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
     loadXMLAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     saveJSONAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
     loadJSONAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_K));
+    backToLogin->setShortcut(QKeySequence(Qt::Key_Escape));
+
+    QToolButton *dataButton = new QToolButton(this);
+    dataButton->setText(tr("Data"));
+    dataButton->setPopupMode(QToolButton::InstantPopup);
+    QMenu *dataMenu = new QMenu(dataButton);
+    dataButton->setMenu(dataMenu);
+    dataMenu->addAction(loadDataAction);
+    dataMenu->addAction(saveDataAction);
+
+    QToolButton *xmlButton = new QToolButton(this);
+    xmlButton->setText(tr("XML"));
+    xmlButton->setPopupMode(QToolButton::InstantPopup);
+    QMenu *xmlMenu = new QMenu(xmlButton);
+    xmlButton->setMenu(xmlMenu);
+    xmlMenu->addAction(loadXMLAction);
+    xmlMenu->addAction(saveXMLAction);
+
+    QToolButton *jsonButton = new QToolButton(this);
+    jsonButton->setText(tr("JSON"));
+    jsonButton->setPopupMode(QToolButton::InstantPopup);
+    QMenu *jsonMenu = new QMenu(jsonButton);
+    jsonButton->setMenu(jsonMenu);
+    jsonMenu->addAction(loadJSONAction);
+    jsonMenu->addAction(saveJSONAction);
 
 
-
+    toolbar->addWidget(dataButton);
+    toolbar->addWidget(xmlButton);
+    toolbar->addWidget(jsonButton);
     toolbar->addAction(addAction);
-    toolbar->addAction(loadAction);
-    toolbar->addAction(saveAction);
-    toolbar->addAction(loadXMLAction);
-    toolbar->addAction(saveXMLAction);
-    toolbar->addAction(loadJSONAction);
-    toolbar->addAction(saveJSONAction);
+    toolbar->addAction(backToLogin);
 
 
-    connect(loadAction, &QAction::triggered, this, &MainWindow::onLoadData);
-    connect(saveAction, &QAction::triggered, this, &MainWindow::onSaveData);
+    connect(loadDataAction, &QAction::triggered, this, &MainWindow::onLoadData);
+    connect(saveDataAction, &QAction::triggered, this, &MainWindow::onSaveData);
     connect(addAction, &QAction::triggered, this, &MainWindow::onAddClass);
     connect(saveXMLAction, &QAction::triggered, this, &MainWindow::onSaveDataXML);
     connect(loadXMLAction, &QAction::triggered, this, &MainWindow::onLoadDataXML);
     connect(saveJSONAction, &QAction::triggered, this, &MainWindow::onSaveDataJSON);
     connect(loadJSONAction, &QAction::triggered, this, &MainWindow::onLoadDataJSON);
+    connect(backToLogin, &QAction::triggered, this, &MainWindow::onBackToLogin);
 
 }
 
@@ -458,3 +485,8 @@ void MainWindow::onLoadDataJSON() {
     QMessageBox::information(this, tr("Success"), tr("Data loaded successfully."));
 }
 
+void MainWindow::onBackToLogin() {
+    LoginWindow *login = new LoginWindow();
+    login->show();
+    this->close();
+}
