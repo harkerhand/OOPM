@@ -25,6 +25,7 @@
 #include <QToolButton>
 #include <QMenu>
 #include "LoginWindow.h"
+#include "SearchDialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _classes() {
@@ -52,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     displayClasses();
 
     connect(_tableView, &QTableView::clicked, this, &MainWindow::onCellClicked);
-
+    _classes = {};
 }
 
 void MainWindow::setupToolbar() {
@@ -67,6 +68,7 @@ void MainWindow::setupToolbar() {
     QAction *saveJSONAction = new QAction(tr("Save JSON"), this);
     QAction *loadJSONAction = new QAction(tr("Load JSON"), this);
     QAction *backToLogin = new QAction(tr("Back Login"), this);
+    _searchButton = new QPushButton(tr("Search"), this);
 
     loadDataAction->setShortcut(QKeySequence::Open);
     saveDataAction->setShortcut(QKeySequence::Save);
@@ -76,6 +78,7 @@ void MainWindow::setupToolbar() {
     saveJSONAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
     loadJSONAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_K));
     backToLogin->setShortcut(QKeySequence(Qt::Key_Escape));
+    _searchButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
 
     QToolButton *dataButton = new QToolButton(this);
     dataButton->setText(tr("Data"));
@@ -107,6 +110,7 @@ void MainWindow::setupToolbar() {
     toolbar->addWidget(jsonButton);
     toolbar->addAction(addAction);
     toolbar->addAction(backToLogin);
+    toolbar->addWidget(_searchButton);
 
 
     connect(loadDataAction, &QAction::triggered, this, &MainWindow::onLoadData);
@@ -117,7 +121,7 @@ void MainWindow::setupToolbar() {
     connect(saveJSONAction, &QAction::triggered, this, &MainWindow::onSaveDataJSON);
     connect(loadJSONAction, &QAction::triggered, this, &MainWindow::onLoadDataJSON);
     connect(backToLogin, &QAction::triggered, this, &MainWindow::onBackToLogin);
-
+    connect(_searchButton, &QPushButton::clicked, this, &MainWindow::onSearchClicked);
 }
 
 void MainWindow::onAddClass() {
@@ -185,13 +189,41 @@ void MainWindow::onLoadData() {
 
 void MainWindow::displayClasses() {
     _tableView->clearSpans();
-    ClassModel *model = new ClassModel(_classes, this);
-    _tableView->setModel(model);
+    if(_searchMode) {
+        ClassModel *model = new ClassModel(_classes_T, this);
+        _tableView->setModel(model);
+    } else {
+        ClassModel *model = new ClassModel(_classes, this);
+        _tableView->setModel(model);
+    }
 
 }
 
+bool MainWindow::removeById(const int id) {
+    if(_searchMode) {
+        for(int i = 0; i < _classes_T.size(); i++) {
+            if(_classes_T.at(i).id() == id) {
+                _classes_T.removeAt(i);
+            }
+        }
+    }
+    for(int i = 0; i < _classes.size(); i++) {
+        if(_classes.at(i).id() == id) {
+            _classes.removeAt(i);
+            return true;
+        }
+    }
+    return false;
+}
 
-
+ClassInfo& MainWindow::findClassById(QList<ClassInfo>& classes, const int id) {
+    for(int i = 0; i < classes.size(); i++) {
+        if(classes.at(i).id() == id) {
+            return classes[i];
+        }
+    }
+    return classes[0];
+}
 
 void MainWindow::onCellClicked(const QModelIndex &index) {
     if (!index.isValid())
@@ -206,15 +238,21 @@ void MainWindow::onCellClicked(const QModelIndex &index) {
         QAbstractButton* deleteButton = msgBox.addButton(tr("Delete"), QMessageBox::NoRole);
         msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
         msgBox.exec();
-
+        QVariant data = _tableView->model()->data(index);
+        int tempId = data.toInt();
         if(msgBox.clickedButton() == deleteButton) {
-            _classes.removeAt(row);
+            removeById(tempId);
+            QMessageBox::information(this, tr("Class Deleted"), QString(tr("Class %1 deleted successfully!")).arg(findClassById(_classes, tempId).name()));
             displayClasses();
         } else if(msgBox.clickedButton() == modifyButton) {
-            CreateClassDialog dialog(this, _classes, _classes.at(row), true);
+            ClassInfo &tClass = findClassById(_classes ,tempId);
+            CreateClassDialog dialog(this, _classes, tClass, true);
             if (dialog.exec() == QDialog::Accepted) {
                 ClassInfo newClass = dialog.getClassInfo();
-                _classes[row] = newClass;
+                tClass = newClass;
+                if(_searchMode) {
+                    findClassById(_classes_T ,tempId) = newClass;
+                }
                 QMessageBox::information(this, tr("Class Created"), QString(tr("Class %1 modified successfully!")).arg(newClass.name()));
                 displayClasses();
             }
@@ -489,4 +527,26 @@ void MainWindow::onBackToLogin() {
     LoginWindow *login = new LoginWindow();
     login->show();
     this->close();
+}
+
+void MainWindow::onSearchClicked() {
+    SearchDialog dialog(_classes, this);
+    connect(&dialog, &SearchDialog::searchCompleted, this, &MainWindow::handleSearchCompleted);
+    connect(&dialog, &SearchDialog::cancelSearch, this, &MainWindow::onCancelSearch);
+    dialog.exec();
+}
+
+void MainWindow::handleSearchCompleted(const QList<ClassInfo> &filteredClasses) {
+    _classes_T = filteredClasses; // 更新类列表
+    _searchMode = true;
+    _searchButton->setStyleSheet("color: blue;");
+    displayClasses(); // 重新显示更新后的列表
+}
+
+void MainWindow::onCancelSearch() {
+    // 处理取消查询的逻辑
+    _classes_T.clear();
+    _searchMode = false;
+    _searchButton->setStyleSheet("");
+    displayClasses();
 }

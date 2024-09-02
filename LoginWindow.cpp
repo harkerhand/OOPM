@@ -56,7 +56,7 @@ void LoginWindow::setupUI() {
         "}"
     );
     connect(_loginButton, &QPushButton::clicked, this, &LoginWindow::onLoginButtonClicked);
-
+    _loginButton->setShortcut(QKeySequence(Qt::Key_Return));
     _languageComboBox = new QComboBox();
     _languageComboBox->addItem(tr("English"));
     _languageComboBox->addItem(tr("中文"));

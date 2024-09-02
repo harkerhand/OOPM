@@ -73,7 +73,7 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
     // 创建和取消按钮
     _createButton = new QPushButton(isModifyMode ? tr("Modify") : tr("Create"), this);
     formLayout->addRow(_createButton);
-
+    _createButton->setShortcut(QKeySequence(Qt::Key_Return));
     connect(_memberTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CreateMemberDialog::onMemberTypeChanged);
     connect(_dataTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CreateMemberDialog::onDataTypeChanged);
     connect(_createButton, &QPushButton::clicked, this, &QDialog::accept);
@@ -128,10 +128,10 @@ void CreateMemberDialog::onDataTypeChanged() {
             }
         } else if (dataType == DataType::String) {
             bool ok;
-            std::string str = QInputDialog::getText(this, tr("Input String"),
-                                            tr("Enter string for selected data type:"), QLineEdit::Normal, "", &ok).toStdString();
+            QString str = QInputDialog::getText(this, tr("Input String"),
+                                            tr("Enter string for selected data type:"), QLineEdit::Normal, "", &ok);
             if (ok) {
-                _memorySizeSpinBox->setValue(sizeof(str));
+                _memorySizeSpinBox->setValue(str.length());
             }
         } else {
             int size = getDataTypeSize(dataType);

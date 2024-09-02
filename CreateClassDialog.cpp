@@ -67,6 +67,7 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
 
     _createButton = new QPushButton(isModifyMode ? tr("Modify") : tr("Create") , this);
     formLayout->addRow(_createButton);
+    _createButton->setShortcut(QKeySequence(Qt::Key_Return));
 
     // 将按钮的信号连接到对话框的槽函数
     connect(_createButton, &QPushButton::clicked, this, &QDialog::accept);

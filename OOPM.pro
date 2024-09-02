@@ -21,6 +21,7 @@ SOURCES += \
     LoginWindow.cpp \
     MemberDetailsDialog.cpp \
     MembersDetailDialog.cpp \
+    SearchDialog.cpp \
     UserManagementWindow.cpp \
     Utils.cpp \
     main.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     MemberDetailsDialog.h \
     MemberModel.h \
     MembersDetailDialog.h \
+    SearchDialog.h \
     SimpleTextDialog.h \
     UserManagementWindow.h \
     UserModel.h \
