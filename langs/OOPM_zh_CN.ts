@@ -382,6 +382,22 @@ Password: %2</source>
         <source>JSON</source>
         <translation>JSON</translation>
     </message>
+    <message>
+        <source>Search</source>
+        <translation>搜索</translation>
+    </message>
+    <message>
+        <source>Class Deleted</source>
+        <translation>删除类</translation>
+    </message>
+    <message>
+        <source>Class %1 deleted successfully!</source>
+        <translation>类%1成功删除！</translation>
+    </message>
+    <message>
+        <source>!Search state!</source>
+        <translation>！搜索状态！</translation>
+    </message>
 </context>
 <context>
     <name>MemberDetailsDialog</name>
@@ -480,6 +496,57 @@ Accessibility: %6</source>
     <message>
         <source>Total Memory Size: %1 bytes</source>
         <translation>总占用大小：%1 字节</translation>
+    </message>
+</context>
+<context>
+    <name>SearchDialog</name>
+    <message>
+        <source>Search Class Info</source>
+        <translation>搜索类信息</translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation>搜索</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Today</source>
+        <translation>今天</translation>
+    </message>
+    <message>
+        <source>Last Week</source>
+        <translation>上周</translation>
+    </message>
+    <message>
+        <source>Last Month</source>
+        <translation>上月</translation>
+    </message>
+    <message>
+        <source>Custom Range</source>
+        <translation>自定义</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation>类名：</translation>
+    </message>
+    <message>
+        <source>Author:</source>
+        <translation>作者：</translation>
+    </message>
+    <message>
+        <source>Date Range:</source>
+        <translation>日期范围：</translation>
+    </message>
+    <message>
+        <source>Start Date:</source>
+        <translation>开始日期：</translation>
+    </message>
+    <message>
+        <source>End Date:</source>
+        <translation>结束日期：</translation>
     </message>
 </context>
 <context>

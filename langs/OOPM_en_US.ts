@@ -355,6 +355,22 @@
         <source>JSON</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Class Deleted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Class %1 deleted successfully!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>!Search state!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MemberDetailsDialog</name>
@@ -448,6 +464,57 @@ Accessibility: %6</source>
     <message>
         <source>Total Memory Size: %1 bytes</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>SearchDialog</name>
+    <message>
+        <source>Search Class Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Today</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Last Week</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Last Month</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Author:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Range:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start Date:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>End Date:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
