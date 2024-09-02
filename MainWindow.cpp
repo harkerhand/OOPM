@@ -539,7 +539,8 @@ void MainWindow::onSearchClicked() {
 void MainWindow::handleSearchCompleted(const QList<ClassInfo> &filteredClasses) {
     _classes_T = filteredClasses; // 更新类列表
     _searchMode = true;
-    _searchButton->setStyleSheet("color: blue;");
+    _searchButton->setStyleSheet("color: red;");
+    _searchButton->setText(tr("!Search state!"));
     displayClasses(); // 重新显示更新后的列表
 }
 
@@ -548,5 +549,6 @@ void MainWindow::onCancelSearch() {
     _classes_T.clear();
     _searchMode = false;
     _searchButton->setStyleSheet("");
+    _searchButton->setText(tr("Search"));
     displayClasses();
 }
