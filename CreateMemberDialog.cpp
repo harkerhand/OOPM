@@ -5,7 +5,6 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QInputDialog>
-#include <string>
 
 CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember> &members, const ClassMember &member, bool isModifyMode)
     : QDialog(parent), _members(members), _isModifyMode(isModifyMode) {

@@ -7,8 +7,8 @@
 #include <QFileInfo>
 #include <QDebug>
 
-QString documentsPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-QString USER_FILE_PATH = documentsPath + "/OOPM/passports/users.dat";
+QString DOCUMENT_PATH = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+QString USER_FILE_PATH = DOCUMENT_PATH + "/OOPM/passports/users.dat";
 
 
 int getDataTypeSize(DataType dataType) {

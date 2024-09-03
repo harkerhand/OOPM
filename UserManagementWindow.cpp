@@ -9,8 +9,6 @@
 #include <QDebug>
 #include "UserModel.h"
 #include <QHeaderView>
-#include <QRegularExpressionValidator>
-#include <QRegularExpression>
 #include "LoginWindow.h"
 
 UserManagementWindow::UserManagementWindow(QWidget *parent)

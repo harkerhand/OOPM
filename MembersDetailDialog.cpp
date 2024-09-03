@@ -2,7 +2,6 @@
 #include "CreateMemberDialog.h"
 #include <QHeaderView>
 #include <QToolBar>
-#include <QHeaderView>
 #include <QMessageBox>
 
 MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *parent)

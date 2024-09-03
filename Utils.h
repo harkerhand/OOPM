@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include "Enums.h"
+extern QString DOCUMENT_PATH;
 extern QString USER_FILE_PATH;
 
 int getDataTypeSize(DataType dataType);

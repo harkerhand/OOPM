@@ -2,8 +2,6 @@
 #define USERMODEL_H
 
 #include <QAbstractTableModel>
-#include <QStringList>
-#include <QVector>
 
 class UserModel : public QAbstractTableModel {
     Q_OBJECT

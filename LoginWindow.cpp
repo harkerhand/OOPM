@@ -12,13 +12,10 @@
 #include <QDesktopWidget>
 #include <QTranslator>
 #include <QPainter>
-#include <QPixmap>
 #include <QTextStream>
 #include <QDebug>
 #include <QFile>
 #include "UserManagementWindow.h"
-#include <QRegularExpressionValidator>
-#include <QRegularExpression>
 
 LoginWindow::LoginWindow(QWidget *parent) : QWidget(parent), _translator(new QTranslator(this)) {
     setupUI();
