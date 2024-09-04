@@ -54,10 +54,6 @@ void LoginWindow::setupUI() {
     );
     connect(_loginButton, &QPushButton::clicked, this, &LoginWindow::onLoginButtonClicked);
     _loginButton->setShortcut(QKeySequence(Qt::Key_Return));
-    _languageComboBox = new QComboBox();
-    _languageComboBox->addItem(tr("English"));
-    _languageComboBox->addItem(tr("中文"));
-    connect(_languageComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LoginWindow::onLanguageChanged);
 
     QWidget *centralWidget = new QWidget(this);
     centralWidget->setStyleSheet("background-color: transparent;");
