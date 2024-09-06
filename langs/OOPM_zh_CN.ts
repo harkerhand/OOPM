@@ -419,6 +419,14 @@ Accessibility: %6</source>
         <source>Member Details</source>
         <translation>成员详情</translation>
     </message>
+    <message>
+        <source>Delete</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation>返回</translation>
+    </message>
 </context>
 <context>
     <name>MemberModel</name>
@@ -451,7 +459,7 @@ Accessibility: %6</source>
     <name>MembersDetailDialog</name>
     <message>
         <source>Add Member</source>
-        <translation></translation>
+        <translation>添加成员</translation>
     </message>
     <message>
         <source>Members Details</source>

@@ -6,9 +6,12 @@
 MemberDetailsDialog::MemberDetailsDialog(const ClassMember &member, QWidget *parent)
     : QDialog(parent), _member(member) {
 
+    // 移除问号
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     _memberDetailsLabel = new QLabel(this);
-    _deleteButton = new QPushButton("Delete", this);
-    _returnButton = new QPushButton("Return", this);
+    _deleteButton = new QPushButton(tr("Delete"), this);
+    _returnButton = new QPushButton(tr("Return"), this);
 
     // 设定详细信息
     QString details = QString(tr("ID: %1\nName: %2\nType: %3\nMemory: %4 bytes\nDataType: %5\nAccessibility: %6"))

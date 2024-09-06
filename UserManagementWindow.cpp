@@ -39,8 +39,12 @@ void UserManagementWindow::setupUI() {
     QHBoxLayout *passwordLayout = new QHBoxLayout();
     usernameLayout->addWidget(new QLabel(tr("Username:")));
     usernameLayout->addWidget(_usernameEdit);
+    usernameLayout->setStretch(0, 1);
+    usernameLayout->setStretch(1, 2);
     passwordLayout->addWidget(new QLabel(tr("Password:")));
     passwordLayout->addWidget(_passwordEdit);
+    passwordLayout->setStretch(0, 1);
+    passwordLayout->setStretch(1, 2);
 
     mainLayout->addLayout(usernameLayout);
     mainLayout->addLayout(passwordLayout);

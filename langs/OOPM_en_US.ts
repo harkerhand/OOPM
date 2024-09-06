@@ -387,6 +387,14 @@ Accessibility: %6</source>
         <source>Member Details</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MemberModel</name>
