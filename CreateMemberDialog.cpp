@@ -86,7 +86,7 @@ CreateMemberDialog::CreateMemberDialog(QWidget *parent, const QList<ClassMember>
 
     setLayout(mainLayout);
     setWindowTitle(isModifyMode ? tr("Modify") : tr("Create New") +  QString(tr(" Class Member")));
-
+    setWindowIcon(QIcon(ICON_PATH));
     onMemberTypeChanged();
     onDataTypeChanged();
 }

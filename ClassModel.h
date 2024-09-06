@@ -56,6 +56,36 @@ public:
         return QVariant();
     }
 
+    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override {
+        // 使用 std::sort 对 _classes 进行排序
+        std::sort(_classes.begin(), _classes.end(), [column, order](const ClassInfo &a, const ClassInfo &b) {
+            switch (column) {
+                case 0:  // 根据 ID 排序
+                    return order == Qt::AscendingOrder ? a.id() < b.id() : a.id() > b.id();
+                case 1:  // 根据 Class Name 排序
+                    return order == Qt::AscendingOrder ? a.name() < b.name() : a.name() > b.name();
+                case 2:  // 根据 Base Class Name 排序
+                    return order == Qt::AscendingOrder ? a.baseClassName() < b.baseClassName() : a.baseClassName() > b.baseClassName();
+                case 3:  // 根据 Function 排序
+                    return order == Qt::AscendingOrder ? a.function() < b.function() : a.function() > b.function();
+                case 4:  // 根据 Creation Date 排序
+                    return order == Qt::AscendingOrder ? a.creationDate() < b.creationDate() : a.creationDate() > b.creationDate();
+                case 5:  // 根据 Author 排序
+                    return order == Qt::AscendingOrder ? a.author() < b.author() : a.author() > b.author();
+                case 6:  // 根据成员数量排序
+                    return order == Qt::AscendingOrder ? a.members().size() < b.members().size() : a.members().size() > b.members().size();
+                default:
+                    return false;
+            }
+        });
+
+        // 通知视图数据已更改
+        emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1));
+    }
+
+
+
+
 private:
     QList<ClassInfo> _classes;
 };

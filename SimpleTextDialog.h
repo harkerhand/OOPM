@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QIcon>
+#include "Utils.h"
 
 class SimpleTextDialog : public QDialog {
     Q_OBJECT
@@ -28,6 +30,7 @@ public:
         setMinimumWidth(300);
 
         setWindowTitle(tr("Detail"));
+        setWindowIcon(QIcon(ICON_PATH));
     }
 };
 

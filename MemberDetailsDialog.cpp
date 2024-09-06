@@ -1,6 +1,7 @@
 #include "MemberDetailsDialog.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include "Utils.h"
 
 MemberDetailsDialog::MemberDetailsDialog(const ClassMember &member, QWidget *parent)
     : QDialog(parent), _member(member) {
@@ -41,6 +42,7 @@ MemberDetailsDialog::MemberDetailsDialog(const ClassMember &member, QWidget *par
     setLayout(mainLayout);
     resize(400, 300);
     setWindowTitle(tr("Member Details"));
+    setWindowIcon(QIcon(ICON_PATH));
 }
 
 void MemberDetailsDialog::onDeleteButtonClicked() {

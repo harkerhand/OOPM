@@ -26,6 +26,7 @@ private slots:
     void onDateTimeChange(); // 处理日期范围变化事件
 
 private:
+    QLineEdit *_idEdit; // 用于输入类id的编辑框
     QLineEdit *_nameEdit; // 用于输入类名称的编辑框
     QLineEdit *_authorEdit; // 用于输入作者名称的编辑框
     QComboBox *_dateRangeComboBox; // 用于选择日期范围的下拉框

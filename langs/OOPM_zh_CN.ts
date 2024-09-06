@@ -548,6 +548,10 @@ Accessibility: %6</source>
         <source>End Date:</source>
         <translation>结束日期：</translation>
     </message>
+    <message>
+        <source>ID:</source>
+        <translation>ID:</translation>
+    </message>
 </context>
 <context>
     <name>SimpleTextDialog</name>
@@ -601,6 +605,10 @@ Accessibility: %6</source>
     <message>
         <source>Password cannot be less than six digits.</source>
         <translation>密码不能低于六位。</translation>
+    </message>
+    <message>
+        <source>User Manager</source>
+        <translation>用户管理</translation>
     </message>
 </context>
 <context>

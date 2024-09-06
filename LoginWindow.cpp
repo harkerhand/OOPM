@@ -133,6 +133,7 @@ void LoginWindow::setupUI() {
 
     setWindowTitle(tr("Login"));
     setFixedSize(1280, 720);
+    setWindowIcon(QIcon(ICON_PATH));
 
     // Center the window on the screen
     QDesktopWidget *desktop = QApplication::desktop();
@@ -173,10 +174,7 @@ void LoginWindow::onLoginButtonClicked() {
         QMessageBox::information(this, tr("Error"), tr("Username or password incorrect!"));
         break;
     }
-    _usernameLineEdit->setText("");
     _passwordLineEdit->setText("");
-
-
 }
 
 void LoginWindow::onLanguageChanged(int index) {

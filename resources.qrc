@@ -8,6 +8,7 @@
         <file>imgs/darkBg.png</file>
         <file>imgs/lightBg.png</file>
         <file>imgs/bgtext.png</file>
+        <file>imgs/icon.png</file>
         <file>passports/admin.dat</file>
     </qresource>
 </RCC>

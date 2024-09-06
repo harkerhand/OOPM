@@ -26,6 +26,7 @@
 #include <QMenu>
 #include "LoginWindow.h"
 #include "SearchDialog.h"
+#include "Utils.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _classes() {
@@ -35,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
 
     _tableView = new QTableView(this);
+    _tableView->setSortingEnabled(true);
 
     //自动调整
     _tableView->horizontalHeader()->setStretchLastSection(true);
@@ -51,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(centralWidget);
     setMinimumSize(1200, 720);
     displayClasses();
+    setWindowIcon(QIcon(ICON_PATH));
 
     connect(_tableView, &QTableView::clicked, this, &MainWindow::onCellClicked);
     _classes = {};

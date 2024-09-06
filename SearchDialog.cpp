@@ -2,6 +2,7 @@
 #include <QDateTimeEdit>
 #include <QDateTime>
 #include <QLabel>
+#include "Utils.h"
 
 SearchDialog::SearchDialog(const QList<ClassInfo> &classes, QWidget *parent)
     : QDialog(parent), _classes(classes) {
@@ -10,6 +11,10 @@ SearchDialog::SearchDialog(const QList<ClassInfo> &classes, QWidget *parent)
 
     setWindowTitle(tr("Search Class Info"));
 
+
+    _idEdit = new QLineEdit(this);
+    QIntValidator *intValidator = new QIntValidator(_idEdit);
+    _idEdit->setValidator(intValidator);
     _nameEdit = new QLineEdit(this);
     _authorEdit = new QLineEdit(this);
     _dateRangeComboBox = new QComboBox(this);
@@ -28,43 +33,65 @@ SearchDialog::SearchDialog(const QList<ClassInfo> &classes, QWidget *parent)
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
-    QHBoxLayout *nameLayout = new QHBoxLayout();
+    QHBoxLayout *idLayout = new QHBoxLayout();
+    idLayout->addWidget(new QLabel(tr("ID:")));
+    idLayout->addWidget(_idEdit);
+    mainLayout->addLayout(idLayout);
+    idLayout->setStretch(0, 1);
+    idLayout->setStretch(1, 2);
+
+    QHBoxLayout *nameLayout = new QHBoxLayout();  
     nameLayout->addWidget(new QLabel(tr("Name:")));
     nameLayout->addWidget(_nameEdit);
     mainLayout->addLayout(nameLayout);
+    nameLayout->setStretch(0, 1);
+    nameLayout->setStretch(1, 2);
 
     QHBoxLayout *authorLayout = new QHBoxLayout();
     authorLayout->addWidget(new QLabel(tr("Author:")));
     authorLayout->addWidget(_authorEdit);
     mainLayout->addLayout(authorLayout);
+    authorLayout->setStretch(0, 1);
+    authorLayout->setStretch(1, 2);
 
     QHBoxLayout *dateLayout = new QHBoxLayout();
     dateLayout->addWidget(new QLabel(tr("Date Range:")));
     dateLayout->addWidget(_dateRangeComboBox);
     mainLayout->addLayout(dateLayout);
+    dateLayout->setStretch(0, 1);
+    dateLayout->setStretch(1, 2);
 
     QHBoxLayout *startDateLayout = new QHBoxLayout();
     startDateLayout->addWidget(new QLabel(tr("Start Date:")));
     startDateLayout->addWidget(_startDateEdit);
+    startDateLayout->setStretch(0, 1);
+    startDateLayout->setStretch(1, 2);
     QHBoxLayout *endDateLayout = new QHBoxLayout();
     endDateLayout->addWidget(new QLabel(tr("End Date:")));
     endDateLayout->addWidget(_endDateEdit);
+    endDateLayout->setStretch(0, 1);
+    endDateLayout->setStretch(1, 2);
     mainLayout->addLayout(startDateLayout);
     mainLayout->addLayout(endDateLayout);
     QHBoxLayout *buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(_searchButton);
     buttonLayout->addWidget(_cancelButton);
+    buttonLayout->setStretch(0, 1);
+    buttonLayout->setStretch(1, 2);
     mainLayout->addLayout(buttonLayout);
 
     connect(_searchButton, &QPushButton::clicked, this, &SearchDialog::onSearch);
     connect(_cancelButton, &QPushButton::clicked, this, &SearchDialog::onCancel);
     connect(_dateRangeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchDialog::onDateTimeChange);
     onDateTimeChange();
+    setMinimumWidth(500);
+    setWindowIcon(QIcon(ICON_PATH));
 }
 
 void SearchDialog::onSearch() {
     QList<ClassInfo> filteredClasses;
 
+    QString idFilter = _idEdit->text();
     QString nameFilter = _nameEdit->text();
     QString authorFilter = _authorEdit->text();
 
@@ -75,6 +102,14 @@ void SearchDialog::onSearch() {
     // 过滤逻辑
     for (const ClassInfo &classInfo : _classes) {
         bool matches = true;
+
+        if (!idFilter.isEmpty()) {
+            bool ok;
+            int idValue = idFilter.toInt(&ok); // 尝试将 idFilter 转换为整数
+            if (ok && classInfo.id() != idValue) {
+                matches = false;
+            }
+        }
 
         if (!nameFilter.isEmpty() && !classInfo.name().contains(nameFilter, Qt::CaseInsensitive)) {
             matches = false;
@@ -96,7 +131,6 @@ void SearchDialog::onSearch() {
     }
 
     emit searchCompleted(filteredClasses);
-    accept(); // 关闭对话框
 }
 
 void SearchDialog::onCancel() {

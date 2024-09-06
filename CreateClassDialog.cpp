@@ -2,6 +2,7 @@
 #include "CreateMemberDialog.h"
 #include "QMessageBox"
 #include "MemberDetailsDialog.h"
+#include "Utils.h"
 
 CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &classes, const ClassInfo& classInfo, const bool isModifyMode)
     : QDialog(parent), _isModifyMode(isModifyMode), _classes(classes) {
@@ -84,6 +85,7 @@ CreateClassDialog::CreateClassDialog(QWidget *parent, const QList<ClassInfo> &cl
     setLayout(mainLayout);
 
     setWindowTitle((isModifyMode ? tr("Modify") : tr("Create New")) + QString(tr(" Class")));
+    setWindowIcon(QIcon(ICON_PATH));
 }
 
 

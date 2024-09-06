@@ -516,6 +516,10 @@ Accessibility: %6</source>
         <source>End Date:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SimpleTextDialog</name>
@@ -568,6 +572,10 @@ Accessibility: %6</source>
     </message>
     <message>
         <source>Password cannot be less than six digits.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User Manager</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -27,14 +27,8 @@ int main(int argc, char *argv[])
         qDebug() << "Folder already exists.";
     }
 
-
-
-//    MainWindow mainWindow;
-//    mainWindow.show();
-
     LoginWindow loginWindow;
     loginWindow.show();
-
 
     return app.exec();
 }

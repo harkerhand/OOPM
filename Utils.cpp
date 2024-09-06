@@ -9,7 +9,7 @@
 
 QString DOCUMENT_PATH = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 QString USER_FILE_PATH = DOCUMENT_PATH + "/OOPM/passports/users.dat";
-
+QString ICON_PATH = ":/imgs/icon.png";
 
 int getDataTypeSize(DataType dataType) {
     switch (dataType) {

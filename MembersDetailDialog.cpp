@@ -3,6 +3,7 @@
 #include <QHeaderView>
 #include <QToolBar>
 #include <QMessageBox>
+#include "Utils.h"
 
 MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *parent)
     : QDialog(parent), _members(members) {
@@ -32,6 +33,7 @@ MembersDetailDialog::MembersDetailDialog(QList<ClassMember> &members, QWidget *p
 
     setLayout(layout);
     setWindowTitle(tr("Members Details"));
+    setWindowIcon(QIcon(ICON_PATH));
     updateTotalSize(); // 初始化时更新总内存大小显示
     resize(900, 600);
     showMembers();

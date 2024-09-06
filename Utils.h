@@ -4,6 +4,7 @@
 #include "Enums.h"
 extern QString DOCUMENT_PATH;
 extern QString USER_FILE_PATH;
+extern QString ICON_PATH;
 
 int getDataTypeSize(DataType dataType);
 QString hashPassword(const QString &password);

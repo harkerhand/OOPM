@@ -57,6 +57,8 @@ void UserManagementWindow::setupUI() {
     connect(_deleteButton, &QPushButton::clicked, this, &UserManagementWindow::onDeleteUser);
     connect(_saveButton, &QPushButton::clicked, this, &UserManagementWindow::saveUserData);
     connect(_backToLogin, &QPushButton::clicked, this, &UserManagementWindow::onBackToLogin);
+    setWindowTitle(tr("User Manager"));
+    setWindowIcon(QIcon(ICON_PATH));
 }
 
 void UserManagementWindow::showUsers() {
