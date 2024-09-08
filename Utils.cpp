@@ -6,11 +6,12 @@
 #include <QStandardPaths>
 #include <QFileInfo>
 #include <QDebug>
+#include <QApplication>
 
 QString DOCUMENT_PATH = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 QString USER_FILE_PATH = DOCUMENT_PATH + "/OOPM/passports/users.dat";
 QString ICON_PATH = ":/imgs/icon.png";
-
+QTranslator translator(qApp);
 int getDataTypeSize(DataType dataType) {
     switch (dataType) {
         case DataType::Int:

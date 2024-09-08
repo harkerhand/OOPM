@@ -17,7 +17,7 @@
 #include <QFile>
 #include "UserManagementWindow.h"
 
-LoginWindow::LoginWindow(QWidget *parent) : QWidget(parent), _translator(new QTranslator(this)) {
+LoginWindow::LoginWindow(QWidget *parent) : QWidget(parent) {
     setupUI();
 }
 
@@ -178,7 +178,7 @@ void LoginWindow::onLoginButtonClicked() {
 }
 
 void LoginWindow::onLanguageChanged(int index) {
-    QTranslator translator;
+    qApp->removeTranslator(&translator);
     if (index == 1) { // 中文选择
         if(translator.load(":/langs/OOPM_zh_CN.qm"))
         {
@@ -188,7 +188,7 @@ void LoginWindow::onLanguageChanged(int index) {
         _englishButton->setStyleSheet("color: white;");
     } else { // 英文选择
         // Clear existing translator
-        if(_translator.load(":/langs/OOPM_en_US.qm"))
+        if(translator.load(":/langs/OOPM_en_US.qm"))
         {
             qApp->installTranslator(&translator);
         }
