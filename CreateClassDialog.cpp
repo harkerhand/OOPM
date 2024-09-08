@@ -171,6 +171,6 @@ void CreateClassDialog::onNameChanged(const QString &text) {
         _createButton->setEnabled(false);
     } else {
         _nameWarningLabel->setVisible(false);
-        if(_nameEdit->text().toInt() != 0 && isIdExists() == false) _createButton->setEnabled(true);
+        if(_idEdit->text().toInt() != 0 && isIdExists() == false) _createButton->setEnabled(true);
     }
 }
