@@ -25,8 +25,8 @@ void ClassInfo::removeMember(int memberId) {
 int ClassInfo::calculateMemorySize() const {
     int totalSize = 0;
     for (const ClassMember& member : _members) {
-        if (member.memberType() == MemberType::Data) {  // 使用 getter 方法
-            totalSize += member.memorySize();  // 使用 getter 方法
+        if (member.memberType() == MemberType::Data) {
+            totalSize += member.memorySize();
         }
     }
     return totalSize;

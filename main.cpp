@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    QFont font("小米兰亭");
+    QFont font("微软雅黑");
     app.setFont(font);
 
     QString path = DOCUMENT_PATH + "/OOPM/passports/"; // 指定新建文件夹的路径
