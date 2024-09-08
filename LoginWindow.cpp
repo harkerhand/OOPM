@@ -178,11 +178,11 @@ void LoginWindow::onLoginButtonClicked() {
 }
 
 void LoginWindow::onLanguageChanged(int index) {
+    QTranslator translator;
     if (index == 1) { // 中文选择
-
-        if(_translator.load(":/langs/OOPM_zh_CN.qm"))
+        if(translator.load(":/langs/OOPM_zh_CN.qm"))
         {
-            qApp->installTranslator(&_translator);
+            qApp->installTranslator(&translator);
         }
         _chineseButton->setStyleSheet("color: blue;"); // Highlight English button
         _englishButton->setStyleSheet("color: white;");
@@ -190,7 +190,7 @@ void LoginWindow::onLanguageChanged(int index) {
         // Clear existing translator
         if(_translator.load(":/langs/OOPM_en_US.qm"))
         {
-            qApp->installTranslator(&_translator);
+            qApp->installTranslator(&translator);
         }
         _englishButton->setStyleSheet("color: blue;"); // Highlight English button
         _chineseButton->setStyleSheet("color: white;");

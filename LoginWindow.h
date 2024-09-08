@@ -33,10 +33,9 @@ private:
     QLabel *_passwordLabel; // 密码标签
     QPushButton *_chineseButton; // 中文按钮
     QPushButton *_englishButton; // 英文按钮
-    QTranslator _translator; // 翻译器，用于处理多语言支持
     QPushButton *_lightThemeButton; // 轻主题按钮
     QPushButton *_darkThemeButton; // 暗主题按钮
-    bool _nowTheme; // 当前主题状态（`true` 表示暗主题，`false` 表示轻主题）
+    bool _nowTheme; // 当前主题状态（`true` 表示暗主题，`false` 表示亮主题）
 
 };
 
